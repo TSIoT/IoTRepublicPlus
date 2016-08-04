@@ -1,0 +1,82 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <ItemGroup>
+    <ClCompile Include="main.cpp" />
+    <ClCompile Include="IoT\IoTManager.cpp">
+      <Filter>IoT</Filter>
+    </ClCompile>
+    <ClCompile Include="Network\TcpClient.cpp">
+      <Filter>Network</Filter>
+    </ClCompile>
+    <ClCompile Include="Network\TcpServer.cpp">
+      <Filter>Network</Filter>
+    </ClCompile>
+    <ClCompile Include="Utility\file.cpp">
+      <Filter>Utility</Filter>
+    </ClCompile>
+    <ClCompile Include="Utility\JsonUtility.cpp">
+      <Filter>Utility</Filter>
+    </ClCompile>
+    <ClCompile Include="Utility\rs232.cpp">
+      <Filter>Utility</Filter>
+    </ClCompile>
+    <ClCompile Include="Utility\SystemUtility.cpp">
+      <Filter>Utility</Filter>
+    </ClCompile>
+    <ClCompile Include="Utility\thread.cpp">
+      <Filter>Utility</Filter>
+    </ClCompile>
+    <ClCompile Include="IoT\IoTUtility.cpp">
+      <Filter>IoT</Filter>
+    </ClCompile>
+  </ItemGroup>
+  <ItemGroup>
+    <Filter Include="Utility">
+      <UniqueIdentifier>{c13afb43-9b32-429a-8c56-6a81dd3ec42d}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Network">
+      <UniqueIdentifier>{01fed1b3-2184-4247-9b69-165d53a6de14}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="IoT">
+      <UniqueIdentifier>{e3aac367-aa02-4f06-a3f2-a1464a009221}</UniqueIdentifier>
+    </Filter>
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="IoT\IoTManager.h">
+      <Filter>IoT</Filter>
+    </ClInclude>
+    <ClInclude Include="Network\TcpClient.h">
+      <Filter>Network</Filter>
+    </ClInclude>
+    <ClInclude Include="Network\TcpServer.h">
+      <Filter>Network</Filter>
+    </ClInclude>
+    <ClInclude Include="Utility\file.h">
+      <Filter>Utility</Filter>
+    </ClInclude>
+    <ClInclude Include="Utility\JsonUtility.h">
+      <Filter>Utility</Filter>
+    </ClInclude>
+    <ClInclude Include="Utility\NetworkUtility.h">
+      <Filter>Utility</Filter>
+    </ClInclude>
+    <ClInclude Include="Utility\rs232.h">
+      <Filter>Utility</Filter>
+    </ClInclude>
+    <ClInclude Include="Utility\SystemUtility.h">
+      <Filter>Utility</Filter>
+    </ClInclude>
+    <ClInclude Include="Utility\thread.h">
+      <Filter>Utility</Filter>
+    </ClInclude>
+    <ClInclude Include="IoT\IoTUtility.h">
+      <Filter>IoT</Filter>
+    </ClInclude>
+    <ClInclude Include="IoT\IoTPackage.h">
+      <Filter>IoT</Filter>
+    </ClInclude>
+    <ClInclude Include="IoT\IoTCommand.h">
+      <Filter>IoT</Filter>
+    </ClInclude>
+  </ItemGroup>
+</Project>
