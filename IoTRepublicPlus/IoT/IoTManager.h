@@ -31,13 +31,13 @@ private:
 	class IoTDeviceInfo
 	{
 	public:
-		string IoTIp;		
+		string IoTIp;
 		string FunctionGroup;
 		string DeviceID;
 		string DeviceDescription;
 		int SocketIndex;
 		int proxied;
-		IoTDeviceInfo::IoTDeviceInfo()
+		IoTDeviceInfo()
 		{
 			this->SocketIndex = -1;
 			this->proxied = -1;
@@ -47,23 +47,24 @@ private:
 	class PackageBuffer
 	{
 	public:
-		char *buffer;
-		int receiveCount;
+		//char *buffer;
+		//int receiveCount;
+		std::vector<char> CharVector;
 
-		PackageBuffer::PackageBuffer()
+		PackageBuffer()
 		{
-			this->buffer = NULL;
-			this->receiveCount = 0;
+			//this->buffer = NULL;
+			//this->receiveCount = 0;
 		}
-	};	
+	};
 
 	//class instance
 	IoTUtility *ioTUtility;
 	//JsonUtility *jsonUtility;
 
 	//members
-	std::vector<IoTDeviceInfo> *registed_devices;	
-	PackageBuffer *packageBuffer;	
+	std::vector<IoTDeviceInfo> *registed_devices;
+	PackageBuffer *packageBuffer;
 
 	//methods
 	void sendIoTPackage(IoTPackage *package, int socketIndex);
@@ -80,7 +81,8 @@ private:
 	std::vector<char> encodeAllRegistedDevices();
 
 	//override TcpServer class event
-	void Event_ReceivedData(int socketIndex, char *buffer, int dataLength);		
+	//void Event_ReceivedData(int socketIndex, char *buffer, int dataLength);
+	void Event_ReceivedData(int socketIndex, std::vector<char> *buffer, int dataLength);
 };
 
 

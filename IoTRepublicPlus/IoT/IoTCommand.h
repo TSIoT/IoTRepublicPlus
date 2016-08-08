@@ -23,12 +23,12 @@ public:
 	string Value;
 	stringstream sendedData;
 
-	IoTCommand::IoTCommand(string content)
+	IoTCommand(string content)
 	{
 		json_t *root;
 		root=JsonUtility::LoadJsonData(content);
 		string jsonRootName = JsonUtility::GetFirstKeyName(root);
-		
+
 		if (jsonRootName == this->rootName)
 		{
 			this->ID = JsonUtility::GetValueInFirstObject(root,"ID");
@@ -49,16 +49,16 @@ public:
 			else if (type == "Man")
 			{
 				this->CmdType = command_t_Management;
-			}			
+			}
 		}
 
 		sendedData << content;
 	}
 
-	IoTCommand::~IoTCommand()
+	~IoTCommand()
 	{
 		this->sendedData.clear();
-		this->sendedData.str(std::string());		
+		this->sendedData.str(std::string());
 	}
 
 	void Packect()

@@ -3,6 +3,7 @@
 
 #include <iostream>
 #include "IoTPackage.h"
+#include <vector>
 using namespace std;
 
 class IoTUtility
@@ -26,8 +27,10 @@ public:
 	}
 
 	//void IoTUtility::FreeIoTPackage(IoTPackage *package);
-	IoTPackage* GetCompletedPackage(char *buffer,int *bufferLength, GetPackageError *error);
-	bool isVaildPackage(char *buffer, int *buffer_length, GetPackageError *error);
+	//IoTPackage* GetCompletedPackage(char *buffer,int *bufferLength, GetPackageError *error);
+	IoTPackage* GetCompletedPackage(std::vector<char> *buffer, GetPackageError *error);
+	//bool isVaildPackage(char *buffer, int *buffer_length, GetPackageError *error);
+	bool isVaildPackage(std::vector<char> *buffer, GetPackageError *error);
 	string GetCurrentProtorolVersion();
 
 private:
@@ -36,9 +39,12 @@ private:
 	int headerColumns = 5;
 	char segmentSymbol;
 
-	IoTPackage* IoTUtility::decodeOnlyHeader(char *buffer, int buffer_length);
-	IoTPackage* IoTUtility::decodePackage(char *buffer, int buffer_length);
-	string* popHeader(char *buffer, int buffer_length);
+	//IoTPackage* IoTUtility::decodeOnlyHeader(char *buffer, int buffer_length);
+	IoTPackage* decodeOnlyHeader(std::vector<char> *buffer);
+	//IoTPackage* IoTUtility::decodePackage(char *buffer, int buffer_length);
+	IoTPackage* decodePackage(std::vector<char> *buffer);
+	//string* popHeader(char *buffer, int buffer_length);
+	string popHeader(std::vector<char> *buffer, int startIndex);
 
 };
 

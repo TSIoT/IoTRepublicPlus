@@ -9,7 +9,8 @@ using namespace std;
 #define PAUSE system("Pause");
 
 #elif defined(__linux__) || defined(__FreeBSD__)
-
+#include <unistd.h>
+#include <sys/time.h>
 #define PAUSE printf("Press Enter any key to continue..."); fgetc(stdin);
 
 #endif

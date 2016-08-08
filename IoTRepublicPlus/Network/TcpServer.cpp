@@ -33,7 +33,7 @@ void TcpServer::StopServer()
 	Thread_stop(&this->serverThread);
 	Thread_kill(&this->serverThread);
     this->uninit();
-    
+
 }
 
 TSSocket TcpServer::GetSocket(int socketIndex)
@@ -64,7 +64,7 @@ void TcpServer::SendDataToExistsConnection(int socketIndex,string buffer)
 {
     if(this->clientSockets[socketIndex]>0)
     {
-        //char *sendBuffer=new char[buffer.length()];		
+        //char *sendBuffer=new char[buffer.length()];
         //std::copy(buffer.begin(),buffer.end(),sendBuffer);
         //send(this->clientSockets[socketIndex],sendBuffer,buffer.length(),0);
 
@@ -121,13 +121,15 @@ int TcpServer::server_loop()
 	}
 	//printf("Initialised.\n");
 #endif
-	
+
 	int activity = 0, i = 0, valread = 0, on = 1;
-	
+
 	//int maxRecvBufSize = this->maxReceiveBuffer;
-	char *buffer = new char[this->maxReceiveBuffer];
-	//std::vector<char> buffer(maxRecvBufSize);
-	
+	//char *buffer = new char[this->maxReceiveBuffer];
+	std::vector<char> buffer;
+	//buffer.reserve(this->maxReceiveBuffer);
+	buffer.resize(this->maxReceiveBuffer);
+
     // Accept a new connection need the variable
     TSSocket new_socket;
     struct sockaddr_in  address;
@@ -135,7 +137,7 @@ int TcpServer::server_loop()
     //select server need the variable
     TimeSpan timeout;
     fd_set readfds;
-	
+
     #if defined(WIN32)
         int addrlen = sizeof(struct sockaddr_in);
 	#elif defined(__linux__) || defined(__FreeBSD__)
@@ -147,7 +149,7 @@ int TcpServer::server_loop()
 
 	timeout.tv_sec = 0;
 	timeout.tv_usec = 100;
-	
+
     if((this->listener=socket(AF_INET,SOCK_STREAM,0))==-1)
     {
         cout << "TCP server Could not create socket\n" <<endl;
@@ -169,7 +171,7 @@ int TcpServer::server_loop()
 	if((setsockopt(this->listener,SOL_SOCKET,SO_REUSEADDR,&on,sizeof(int)))<0)
     {
         cout << "setsockopt failed" <<endl;
-        return ErrorCode_SocketError;
+        return NetworkError_SocketError;
     }
     else
     {
@@ -182,7 +184,7 @@ int TcpServer::server_loop()
 	address.sin_family = AF_INET;
 	address.sin_addr.s_addr = INADDR_ANY;
 	address.sin_port = htons(this->serverPort);
-	
+
 	//Bind
 	if (bind(this->listener, (struct sockaddr *)&address, sizeof(address)) == -1)
 	{
@@ -251,7 +253,8 @@ int TcpServer::server_loop()
                 //std::fill_n(buffer,this->maxReceiveBuffer,'\0');
 				//buffer.erase(buffer.begin(), buffer.end());
 				//std::fill_n(buffer.data(), this->maxReceiveBuffer, '\0');
-				valread = recv(this->clientSockets[i], buffer, this->maxReceiveBuffer, 0);
+				//buffer.clear();
+				valread = recv(this->clientSockets[i], &buffer.at(0), this->maxReceiveBuffer, 0);
 
 				if (valread <= 0)
 				{
@@ -268,19 +271,27 @@ int TcpServer::server_loop()
 				{
 				    //cout << this->serverPort<<":";
 				    //cout << string(buffer) <<endl;
-				    this->Event_ReceivedData(i,buffer,valread);
-				}				
+				    //this->Event_ReceivedData(i,buffer,valread);
+					this->Event_ReceivedData(i, &buffer, valread);
+					//buffer.erase(buffer.begin(), buffer.begin()+ valread);
+				}
 			}
 		}
     }
-	
+
     return NetworkError_UnknownError;
 }
 
 //Events for override by child class
+/*
 void TcpServer::Event_ReceivedData(int socketIndex, char* buffer, int dataLength)
 {
     cout << "Tcp received data handler!" <<endl;
+}
+*/
+void TcpServer::Event_ReceivedData(int socketIndex, std::vector<char> *buffer,int dataLength)
+{
+	cout << "Tcp received data handler!" << endl;
 }
 
 void TcpServer::Event_NewConnection(int socketIndex)

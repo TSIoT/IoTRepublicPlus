@@ -37,7 +37,8 @@ private:
 	static void server_main_loop_entry(TcpServer *serverObj);
     int server_loop();
 
-    virtual void Event_ReceivedData(int socketIndex, char* buffer, int dataLength);
+    //virtual void Event_ReceivedData(int socketIndex, char* buffer, int dataLength);
+	virtual void Event_ReceivedData(int socketIndex, std::vector<char> *buffer,int dataLength);
     virtual void Event_NewConnection(int socketIndex);
     virtual void Event_ConnectionDenied(int socketIndex);
 };

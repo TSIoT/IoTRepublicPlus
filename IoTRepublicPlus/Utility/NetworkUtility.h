@@ -19,7 +19,7 @@ typedef TIMEVAL TimeSpan;
 #include <unistd.h>
 typedef int TSSocket;
 typedef struct timeval TimeSpan;
-#define CloseIoTSocket close
+#define CloseTSSocket close
 #define PAUSE printf("Press Enter any key to continue..."); fgetc(stdin);
 
 #endif

@@ -36,7 +36,7 @@ int JsonUtility::jsonTest()
 
             iter = json_object_iter_next(root, iter);
         }
-        
+
         json_t *userData=json_object_get( root, "USER" );
         json_t *jsonID = json_object_get( userData, "ID" );
         const char *rootLevel=json_string_value(jsonID);
@@ -57,7 +57,7 @@ int JsonUtility::jsonTest()
         rootLevel=json_string_value(jsonID);
         printf("PW:%s",rootLevel);
 
-		char *data=json_dumps(root, JSON_ENSURE_ASCII| JSON_COMPACT);
+		//char *data=json_dumps(root, JSON_ENSURE_ASCII| JSON_COMPACT);
 
     }
     else
@@ -80,7 +80,7 @@ json_t* JsonUtility::LoadJsonData(string text)
 
 	if (!root)
 	{
-		fprintf(stderr, "error: on line %d: %s\n", error.line, error.text);		
+		fprintf(stderr, "error: on line %d: %s\n", error.line, error.text);
 	}
 
 	return root;

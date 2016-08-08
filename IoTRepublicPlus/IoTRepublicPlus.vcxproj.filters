@@ -29,6 +29,9 @@
     <ClCompile Include="IoT\IoTUtility.cpp">
       <Filter>IoT</Filter>
     </ClCompile>
+    <ClCompile Include="IoT\IoTPackage.cpp">
+      <Filter>IoT</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <Filter Include="Utility">

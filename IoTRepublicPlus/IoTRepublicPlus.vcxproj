@@ -20,6 +20,7 @@
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="IoT\IoTManager.cpp" />
+    <ClCompile Include="IoT\IoTPackage.cpp" />
     <ClCompile Include="IoT\IoTUtility.cpp" />
     <ClCompile Include="main.cpp" />
     <ClCompile Include="Network\TcpClient.cpp" />
