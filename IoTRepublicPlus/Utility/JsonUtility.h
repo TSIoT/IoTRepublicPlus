@@ -1,8 +1,11 @@
 #ifndef JSONUTILITY_H
 #define JSONUTILITY_H
 
-using namespace std;
+
 #include <iostream>
+#include <vector>
+
+using namespace std;
 
 #if defined(WIN32)
 //windows version need add the directory in Property > Linker > Additional library Directories
@@ -23,12 +26,17 @@ public:
 
 	//void LoadJsonData(json_t *root, string *text);
 	static json_t* LoadJsonData(string text);
+	static json_t* LoadJsonData(std::vector<char> *text);
 	static string ExportJsonContent(json_t *root);
 	static void PrintJasonData(char *text);
 	static bool IsLeaglJsonFile(char* text);
+	static bool IsLeaglJsonFile(std::vector<char> *text);
 	static string GetFirstKeyName(json_t *root);
 	static string GetValueInFirstObject(json_t *root,string keyName);
 	static void SetValueInFirstObject(json_t *root,string keyName, string value);
+	static string GetValueInRootObject(json_t *root, string keyName);
+
+
 	/*
 	void DumpTest()
 	{
@@ -66,7 +74,7 @@ public:
 
 		json_error_t error;
 		json_t *root;
-		
+
 		root = json_loads(cmd, 0, &error);
 
 		if (!root)
@@ -101,5 +109,6 @@ private:
 
 };
 #endif // JSONUTILITY_H
+
 
 

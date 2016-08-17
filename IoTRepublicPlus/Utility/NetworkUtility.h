@@ -31,7 +31,8 @@ enum NetworkError
 	NetworkError_InitError,
 	NetworkError_SocketError,
 	NetworkError_ConnectError,
-
+	NetworkError_Timeout,
+	NetworkError_LoginError,
 };
 
 

@@ -21,6 +21,8 @@ public:
 	void StartManager();
 	void StopManager();
 
+	bool IsStarted;
+
 private:
 	string ServerIoTIP="Master";
 	string currentVersion = "IUDP1.0";
@@ -64,7 +66,8 @@ private:
 
 	//members
 	std::vector<IoTDeviceInfo> *registed_devices;
-	PackageBuffer *packageBuffer;
+	std::vector<PackageBuffer> *packageBuffer;
+	//PackageBuffer *packageBuffer;
 
 	//methods
 	void sendIoTPackage(IoTPackage *package, int socketIndex);

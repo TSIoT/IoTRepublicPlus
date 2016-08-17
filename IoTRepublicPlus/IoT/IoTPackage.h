@@ -298,8 +298,7 @@ public:
 		//this->DataForSending[offset] = SegmentSymbol;
 
 
-		//source ip
-		tempStream.str(std::string()); //clear tempStream
+		//source ip		
 		for (i = 0; i <(int)this->SorIp.length(); i++)
 		{
 			//this->DataForSending[offset] = this->SorIp.at(i);
@@ -309,8 +308,7 @@ public:
 		//this->DataForSending[offset] = SegmentSymbol;
 
 
-		//destination ip
-		tempStream.str(std::string()); //clear tempStream
+		//destination ip		
 		for (i = 0; i <(int)this->DesIp.length(); i++)
 		{
 			//this->DataForSending[offset] = this->DesIp.at(i);

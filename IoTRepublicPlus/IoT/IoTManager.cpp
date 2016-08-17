@@ -5,6 +5,7 @@
 //public method
 IoTManager::IoTManager(int port, int maxReceiveBuffer, int maxClient) :TcpServer(port, maxReceiveBuffer, maxClient)
 {
+	this->IsStarted = 0;
 	this->ioTUtility = new IoTUtility(this->currentVersion,IoTPackage::SegmentSymbol);
 	//this->jsonUtility = new JsonUtility();
 
@@ -12,13 +13,14 @@ IoTManager::IoTManager(int port, int maxReceiveBuffer, int maxClient) :TcpServer
 	this->registed_devices = new std::vector<IoTDeviceInfo>();
 	this->registed_devices->reserve(this->maxClient);
 
-	this->packageBuffer = new PackageBuffer[this->maxClient];
+	//this->packageBuffer = new PackageBuffer[this->maxClient];
+	this->packageBuffer = new std::vector<PackageBuffer>(this->maxClient);
 
 	for (int i = 0; i < this->maxClient; i++)
 	{
 		//this->packageBuffer[i].buffer = new char[this->maxReceiveBuffer];
 		//this->packageBuffer[i].receiveCount = 0;
-		this->packageBuffer[i].CharVector.reserve(this->maxReceiveBuffer);
+		this->packageBuffer->at(i).CharVector.reserve(this->maxReceiveBuffer);
 	}
 }
 
@@ -72,7 +74,7 @@ void IoTManager::handlePackage(int socketIndex)
 	{
 		//recvPackage = this->ioTUtility->GetCompletedPackage(packageBuffer->buffer, &packageBuffer->receiveCount, &error);
 		//recvPackage = this->ioTUtility->GetCompletedPackage(this->packageBuffer[socketIndex].buffer, &this->packageBuffer[socketIndex].receiveCount, &error);
-		recvPackage = this->ioTUtility->GetCompletedPackage(&this->packageBuffer[socketIndex].CharVector, &error);
+		recvPackage = this->ioTUtility->GetCompletedPackage(&this->packageBuffer->at(socketIndex).CharVector, &error);
 
 		//printAllChar(&this->packageBuffer[socketIndex].CharVector.at(0),this->packageBuffer[socketIndex].CharVector.size());
 
@@ -92,7 +94,7 @@ void IoTManager::handlePackage(int socketIndex)
 				//data error, need to clear the buffer
 				//std::fill_n(this->packageBuffer[socketIndex].buffer, this->maxReceiveBuffer, 0);
 				//this->packageBuffer[socketIndex].receiveCount = 0;
-				this->packageBuffer[socketIndex].CharVector.clear();
+				this->packageBuffer->at(socketIndex).CharVector.clear();
 				cout << "Received data error, clear the buffer" << endl;
 			}
 			else
@@ -141,8 +143,9 @@ void IoTManager::handleManagerPackage(int socketIndex,IoTPackage *package)
 {
 	string rootName = std::string();
 	//string command(package->Data);
-	string command(&package->DataVector.at(0));
-	command = command + "\0";
+	//string command(&package->DataVector.at(0));
+	string command(package->DataVector.begin(), package->DataVector.end());
+	
 
 	json_t *root = JsonUtility::LoadJsonData(command);
 
@@ -302,8 +305,8 @@ void IoTManager::Event_ReceivedData(int socketIndex, std::vector<char> *buffer, 
 {
 	//cout << "Manager received data("<< dataLength << ")" << endl;
 
-	this->packageBuffer[socketIndex].CharVector.insert(
-		this->packageBuffer[socketIndex].CharVector.begin(),
+	this->packageBuffer->at(socketIndex).CharVector.insert(
+		this->packageBuffer->at(socketIndex).CharVector.end(),
 		buffer->begin(),
 		buffer->begin()+ dataLength);
 

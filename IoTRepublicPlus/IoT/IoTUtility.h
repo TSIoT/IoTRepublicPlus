@@ -30,7 +30,7 @@ public:
 	//IoTPackage* GetCompletedPackage(char *buffer,int *bufferLength, GetPackageError *error);
 	IoTPackage* GetCompletedPackage(std::vector<char> *buffer, GetPackageError *error);
 	//bool isVaildPackage(char *buffer, int *buffer_length, GetPackageError *error);
-	bool isVaildPackage(std::vector<char> *buffer, GetPackageError *error);
+	bool isValidPackage(std::vector<char> *buffer, GetPackageError *error);
 	string GetCurrentProtorolVersion();
 
 private:

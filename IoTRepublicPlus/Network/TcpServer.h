@@ -24,15 +24,16 @@ protected:
     void CutConnection(int socketIndex);
     void SendDataToExistsConnection(int socketIndex,char* buffer, int length);
     void SendDataToExistsConnection(int socketIndex,string buffer);
-
+	void SendDataToExistsConnection(int socketIndex,std::vector<char> *buffer);
 
 private:
     TSSocket listener;
-    TSSocket *clientSockets;
+    //TSSocket *clientSockets;
+	std::vector<TSSocket> *clientSockets;
     TSThread serverThread;
     fd_set master;
     NetworkError initServer();
-    void uninit();
+    //void uninit();
     //static void main_loop_entry(TcpServer serverObj);
 	static void server_main_loop_entry(TcpServer *serverObj);
     int server_loop();

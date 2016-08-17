@@ -32,6 +32,15 @@
     <ClCompile Include="IoT\IoTPackage.cpp">
       <Filter>IoT</Filter>
     </ClCompile>
+    <ClCompile Include="Broker\CloudBridge.cpp">
+      <Filter>Broker</Filter>
+    </ClCompile>
+    <ClCompile Include="Network\UdpServer.cpp">
+      <Filter>Network</Filter>
+    </ClCompile>
+    <ClCompile Include="IoT\BrocastServer.cpp">
+      <Filter>IoT</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <Filter Include="Utility">
@@ -42,6 +51,9 @@
     </Filter>
     <Filter Include="IoT">
       <UniqueIdentifier>{e3aac367-aa02-4f06-a3f2-a1464a009221}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Broker">
+      <UniqueIdentifier>{da45e6a4-dd75-4d95-be65-f6d32e25df82}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
   <ItemGroup>
@@ -79,6 +91,15 @@
       <Filter>IoT</Filter>
     </ClInclude>
     <ClInclude Include="IoT\IoTCommand.h">
+      <Filter>IoT</Filter>
+    </ClInclude>
+    <ClInclude Include="Broker\CloudBridge.h">
+      <Filter>Broker</Filter>
+    </ClInclude>
+    <ClInclude Include="Network\UdpServer.h">
+      <Filter>Network</Filter>
+    </ClInclude>
+    <ClInclude Include="IoT\BrocastServer.h">
       <Filter>IoT</Filter>
     </ClInclude>
   </ItemGroup>

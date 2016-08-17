@@ -1,5 +1,6 @@
 #include "JsonUtility.h"
-#include <string>
+//#include <string>
+#include <sstream>
 
 int JsonUtility::jsonTest()
 {
@@ -86,6 +87,29 @@ json_t* JsonUtility::LoadJsonData(string text)
 	return root;
 }
 
+json_t* JsonUtility::LoadJsonData(std::vector<char> *text)
+{
+	json_error_t error;
+	json_t *root;
+	stringstream tempStr;
+
+	for (int i = 0; i < (int)text->size(); i++)
+	{
+		tempStr << text->at(i);
+	}
+	tempStr << '\0';
+	
+	root = json_loads(tempStr.str().c_str(), 0, &error);
+
+	if (!root)
+	{
+		fprintf(stderr, "error: on line %d: %s\n", error.line, error.text);
+	}
+
+	return root;
+}
+
+
 string JsonUtility::ExportJsonContent(json_t *root)
 {
 	char *temp = json_dumps(root, JSON_ENSURE_ASCII | JSON_COMPACT | JSON_PRESERVE_ORDER);
@@ -149,6 +173,35 @@ bool JsonUtility::IsLeaglJsonFile(char* text)
     return result;
 }
 
+bool JsonUtility::IsLeaglJsonFile(std::vector<char> *text)
+{	
+	json_t *root;
+	json_error_t error;
+	stringstream tempStr;
+	
+	for (int i = 0; i < (int)text->size(); i++)
+	{	
+		tempStr << text->at(i);
+	}	
+	tempStr << '\0';
+	//cout << endl;
+	
+	//cout << "IsLeaglJsonFile:" << string(tempText) << endl;
+	
+	//root = json_loads(tempText, 0, &error);
+	root = json_loads(tempStr.str().c_str(), 0, &error);
+	bool result = false;
+
+	if (root)//buffer is a legal json data
+	{
+		result = true;
+	}
+	
+	
+	return result;
+}
+
+
 string JsonUtility::GetFirstKeyName(json_t *root)
 {
     void *iter = json_object_iter(root);
@@ -180,7 +233,7 @@ void JsonUtility::SetValueInFirstObject(json_t *root,string keyName, string valu
     if(json_is_object(root))
     {
         string rootKey=GetFirstKeyName(root);
-        cout << "Root Key:" << rootKey <<endl;
+        //cout << "Root Key:" << rootKey <<endl;
 
         json_t *firstObj=json_object_get( root, rootKey.c_str());
 
@@ -193,7 +246,7 @@ void JsonUtility::SetValueInFirstObject(json_t *root,string keyName, string valu
             key = json_object_iter_key(iter);
             if(keyName==string(key))
             {
-                cout << "Found the key:" <<endl;
+                //cout << "Found the key:" <<endl;
                 json_t *newStr=json_string(value.c_str());
                 json_object_set(firstObj,key,newStr);
                 break;
@@ -203,4 +256,12 @@ void JsonUtility::SetValueInFirstObject(json_t *root,string keyName, string valu
     }
 
 
+}
+
+string JsonUtility::GetValueInRootObject(json_t *root, string keyName)
+{
+	json_t *value = json_object_get(root, keyName.c_str());
+	const char *rootLevel = json_string_value(value);
+
+	return string(rootLevel);
 }

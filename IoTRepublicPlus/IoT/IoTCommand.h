@@ -21,7 +21,7 @@ public:
 	command_t CmdType;
 	string ID;
 	string Value;
-	stringstream sendedData;
+	std::stringstream sendedData;
 
 	IoTCommand(string content)
 	{
@@ -60,7 +60,7 @@ public:
 		this->sendedData.clear();
 		this->sendedData.str(std::string());
 	}
-
+	/*
 	void Packect()
 	{
 		string templete = "{\"IOTCMD\":{\"Type\":\"None\",\"ID\":\"0\",\"Value\":\"0\"}}";
@@ -104,7 +104,7 @@ public:
 			sendedData << JsonUtility::ExportJsonContent(root);
 		}
 	}
-
+	*/
 private:
 	string rootName = "IOTCMD";
 };

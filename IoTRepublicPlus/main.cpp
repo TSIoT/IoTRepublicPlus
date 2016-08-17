@@ -1,12 +1,15 @@
 #include <iostream>
 #include <stdlib.h>
 #include "IoT/IoTManager.h"
+#include "IoT/BrocastServer.h"
 #include "Utility/SystemUtility.h"
 
 #include "Utility/JsonUtility.h"
+#include "Broker/CloudBridge.h"
+
+
 
 using namespace std;
-
 
 #define ServerPort 6210
 #define MaxRecvBuf 2000
@@ -44,10 +47,31 @@ int main()
 	PAUSE;
 	*/
 	
+	/*
+	TcpClient client("104.199.183.220", 6210, 2000);
+	//TcpClient client("192.168.156.199", 6210, 2000);
+	client.Connect();
+	PAUSE;
+	client.Disconnect();
+	*/
+
+	BrocastServer brocastServer(6215, MaxRecvBuf);
+	brocastServer.StartServer();
+	//PAUSE;
+	//brocastServer.StopServer();
+	//PAUSE;
+
+	
 	IoTManager manager(ServerPort, MaxRecvBuf, MaxClient);
 	manager.StartManager();
+	
+	//CloudBridge cloudBroker("192.168.156.199", ServerPort, MaxRecvBuf);
+	CloudBridge cloudBroker("104.199.183.220", ServerPort, MaxRecvBuf);
+	NetworkError error = cloudBroker.Login("DDR", "AAA");
+	cout << "Cloud Broker login result:" << error << endl;
 
-	PAUSE;
+	PAUSE;	
+	cloudBroker.Logout();	
 	manager.StopManager();	
 	
 	return 0;

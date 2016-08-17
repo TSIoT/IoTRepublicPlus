@@ -19,12 +19,15 @@
     </ProjectConfiguration>
   </ItemGroup>
   <ItemGroup>
+    <ClCompile Include="Broker\CloudBridge.cpp" />
+    <ClCompile Include="IoT\BrocastServer.cpp" />
     <ClCompile Include="IoT\IoTManager.cpp" />
     <ClCompile Include="IoT\IoTPackage.cpp" />
     <ClCompile Include="IoT\IoTUtility.cpp" />
     <ClCompile Include="main.cpp" />
     <ClCompile Include="Network\TcpClient.cpp" />
     <ClCompile Include="Network\TcpServer.cpp" />
+    <ClCompile Include="Network\UdpServer.cpp" />
     <ClCompile Include="Utility\file.cpp" />
     <ClCompile Include="Utility\JsonUtility.cpp" />
     <ClCompile Include="Utility\rs232.cpp" />
@@ -32,12 +35,15 @@
     <ClCompile Include="Utility\thread.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="Broker\CloudBridge.h" />
+    <ClInclude Include="IoT\BrocastServer.h" />
     <ClInclude Include="IoT\IoTCommand.h" />
     <ClInclude Include="IoT\IoTManager.h" />
     <ClInclude Include="IoT\IoTPackage.h" />
     <ClInclude Include="IoT\IoTUtility.h" />
     <ClInclude Include="Network\TcpClient.h" />
     <ClInclude Include="Network\TcpServer.h" />
+    <ClInclude Include="Network\UdpServer.h" />
     <ClInclude Include="Utility\file.h" />
     <ClInclude Include="Utility\JsonUtility.h" />
     <ClInclude Include="Utility\NetworkUtility.h" />

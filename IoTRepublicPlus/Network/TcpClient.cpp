@@ -10,7 +10,7 @@ TcpClient::TcpClient(string targetIp, int port, int maxRecvSize)// constructor
     this->maxReceiveBuffer= maxRecvSize;
 	this->IsConnected = 0;
 
-    cout << "TcpClient(int port,int maxSize) Invoked" << endl;
+    //cout << "TcpClient(int port,int maxSize) Invoked" << endl;
     this->initClient();
 }
 
@@ -19,10 +19,9 @@ TcpClient::~TcpClient() //destructor
     cout <<"TCP Closed!"<<endl;
 }
 
-
 NetworkError TcpClient::Connect()
 {
-	NetworkError errorCode = NetworkError_NoError;
+	NetworkError errorCode = NetworkError_UnknownError;
 
 	struct sockaddr_in address;
 	address.sin_addr.s_addr = inet_addr(this->targetIp.c_str());
@@ -36,6 +35,7 @@ NetworkError TcpClient::Connect()
 	}
 	else
 	{
+		errorCode = NetworkError_NoError;
 		this->IsConnected = 1;
 	}
 
@@ -46,7 +46,6 @@ void TcpClient::Disconnect()
 {
 	CloseTSSocket(this->clientSocket);
 }
-
 
 void TcpClient::SendData(char* buffer, int length)
 {
@@ -60,7 +59,6 @@ void TcpClient::SendData(char* buffer, int length)
 	}
 }
 
-
 void TcpClient::SendData(string buffer)
 {
     if(this->IsConnected)
@@ -69,6 +67,33 @@ void TcpClient::SendData(string buffer)
     }
 }
 
+void TcpClient::SendData(std::vector<char> *buffer)
+{
+	if (this->IsConnected)
+	{
+		send(this->clientSocket, &buffer->at(0), buffer->size(), 0);
+		//send(this->clientSocket, buffer.c_str(), buffer.length(), 0);
+	}
+}
+
+void TcpClient::RecviveData(std::vector<char> *buffer)
+{
+	char *recvBuffer = new char[this->maxReceiveBuffer];
+	int recvCount = 0;
+	recvCount = recv(this->clientSocket, recvBuffer, this->maxReceiveBuffer, 0);
+
+	if (recvCount > 0)
+	{
+		buffer->reserve(recvCount);
+		for (int i = 0; i < recvCount; i++)
+		{
+			buffer->push_back(recvBuffer[i]);
+		}
+	}
+
+
+	delete[]recvBuffer;
+}
 
 void TcpClient::StartListen()
 {
@@ -84,8 +109,6 @@ void TcpClient::StopListen()
 	Thread_kill(&this->clientThread);
 
 }
-
-//Protected methods
 
 
 
@@ -116,24 +139,22 @@ void TcpClient::client_main_loop_entry(TcpClient *clientObj)
 void TcpClient::client_loop()
 {
 	int n = 0;
-	char *recvBuffer = new char[this->maxReceiveBuffer];	
+	//char *recvBuffer = new char[this->maxReceiveBuffer];	
+	std::vector<char> recvBuffer(this->maxReceiveBuffer);
+	//recvBuffer.resize();
 
 	while (1)
 	{		
-		n = recv(this->clientSocket, recvBuffer, this->maxReceiveBuffer, 0);
+		n = recv(this->clientSocket, &recvBuffer.at(0), this->maxReceiveBuffer, 0);
 		if (n > 0)
 		{
-			this->Event_ReceivedData(recvBuffer, n);
+			this->Event_ReceivedData(&recvBuffer, n);
 		}
 	}	
 }
 
-
 //Events for override by child class
-void TcpClient::Event_ReceivedData(char* data, int dataLength)
-{
-	data[dataLength] = '\0';
-	string msg(data);
-	cout << "Tcp client received data handler!" << endl;
-	cout << "Data:" << msg << endl;		
+void TcpClient::Event_ReceivedData(std::vector<char> *data, int dataLength)
+{	
+	cout << "Tcp client received data handler!" << endl;	
 }
