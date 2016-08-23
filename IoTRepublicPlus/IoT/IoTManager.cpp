@@ -131,11 +131,10 @@ void IoTManager::handlePackage(int socketIndex)
 					this->SendDataToExistsConnection(targetSocketIndex, &recvPackage->DataVectorForSending.at(0), recvPackage->DataVectorForSending.size());
 				}
 			}
-
 			delete recvPackage;
-
 			//this->ioTUtility.FreeIoTPackage(package);
 		}
+
 	} while (recvPackage!=NULL);
 }
 

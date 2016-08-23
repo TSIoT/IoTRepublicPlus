@@ -41,6 +41,18 @@
     <ClCompile Include="IoT\BrocastServer.cpp">
       <Filter>IoT</Filter>
     </ClCompile>
+    <ClCompile Include="Broker\BrokerController.cpp">
+      <Filter>Broker</Filter>
+    </ClCompile>
+    <ClCompile Include="Broker\XBeeBroker_ApiMode.cpp">
+      <Filter>Broker</Filter>
+    </ClCompile>
+    <ClCompile Include="Broker\XBee\XBeeApiLibrary.cpp">
+      <Filter>Broker\XBee</Filter>
+    </ClCompile>
+    <ClCompile Include="Broker\IBroker.cpp">
+      <Filter>Broker</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <Filter Include="Utility">
@@ -54,6 +66,9 @@
     </Filter>
     <Filter Include="Broker">
       <UniqueIdentifier>{da45e6a4-dd75-4d95-be65-f6d32e25df82}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Broker\XBee">
+      <UniqueIdentifier>{e535801f-d01c-44f3-9e37-e06a614310cc}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
   <ItemGroup>
@@ -101,6 +116,18 @@
     </ClInclude>
     <ClInclude Include="IoT\BrocastServer.h">
       <Filter>IoT</Filter>
+    </ClInclude>
+    <ClInclude Include="Broker\IBroker.h">
+      <Filter>Broker</Filter>
+    </ClInclude>
+    <ClInclude Include="Broker\BrokerController.h">
+      <Filter>Broker</Filter>
+    </ClInclude>
+    <ClInclude Include="Broker\XBeeBroker_ApiMode.h">
+      <Filter>Broker</Filter>
+    </ClInclude>
+    <ClInclude Include="Broker\XBee\XBeeApiLibrary.h">
+      <Filter>Broker\XBee</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>

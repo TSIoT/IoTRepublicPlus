@@ -145,6 +145,7 @@ public:
 		this->PacketToSendingVector();
 
 	};
+	
 
 	~IoTPackage()
 	{

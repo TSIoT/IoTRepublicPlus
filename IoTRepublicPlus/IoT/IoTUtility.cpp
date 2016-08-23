@@ -33,7 +33,13 @@ IoTPackage* IoTUtility::GetCompletedPackage(std::vector<char> *buffer, GetPackag
 		*/
 		//modify the buffer
 
+		if (buffer->size() < totalLength)
+		{
+			cout << "This should not happened" << endl;
+		}
+
 		buffer->erase(buffer->begin(), buffer->begin()+ totalLength);
+		//buffer->clear();
 
 	}
 	else

@@ -16,7 +16,7 @@ TcpClient::TcpClient(string targetIp, int port, int maxRecvSize)// constructor
 
 TcpClient::~TcpClient() //destructor
 {
-    cout <<"TCP Closed!"<<endl;
+    //cout <<"TCP Closed!"<<endl;
 }
 
 NetworkError TcpClient::Connect()
@@ -84,7 +84,7 @@ void TcpClient::RecviveData(std::vector<char> *buffer)
 
 	if (recvCount > 0)
 	{
-		buffer->reserve(recvCount);
+		buffer->reserve(buffer->size()+recvCount);
 		for (int i = 0; i < recvCount; i++)
 		{
 			buffer->push_back(recvBuffer[i]);

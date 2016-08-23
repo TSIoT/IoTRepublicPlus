@@ -1,5 +1,6 @@
 #ifndef CloudBridge_H_INCLUDED
 #define CloudBridge_H_INCLUDED
+
 #include <iostream>
 #include "../Network/TcpClient.h"
 #include "../Utility/NetworkUtility.h"

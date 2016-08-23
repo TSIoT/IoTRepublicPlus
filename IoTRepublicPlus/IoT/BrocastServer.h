@@ -14,6 +14,7 @@ public :
 	~BrocastServer();
 
 
+
 private :
 	void Event_ReceivedData(string ipAddress, int port, std::vector<char> *buffer, int dataLength);
 

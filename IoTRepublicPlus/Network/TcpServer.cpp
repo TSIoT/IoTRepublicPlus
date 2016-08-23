@@ -114,7 +114,8 @@ int TcpServer::server_loop()
     cout << "TCP Server starting" << endl;
     cout << "Port:"<< this->serverPort << endl;
     cout << "Max Receive buffer:"<< this->maxReceiveBuffer << endl;
-    cout << "Max Client number:"<< this->maxClient << endl;
+    cout << "Max Client number:"<< this->maxClient << endl;
+
 #if defined(WIN32)
 	WSADATA wsa;
 	//printf("\nInitialising Winsock...");
@@ -123,24 +124,29 @@ int TcpServer::server_loop()
 		printf("Main server WSAStartup failed. Error Code : %d", WSAGetLastError());
 		PAUSE;
 		return -1;
-	}
+	}
+
 #endif
 	int activity = 0, i = 0, valread = 0, on = 1, fdmax=0;
 	
 	std::vector<char> buffer;
 	buffer.resize(this->maxReceiveBuffer);
     TSSocket new_socket;
-    struct sockaddr_in  address;	fd_set readfds;
+    struct sockaddr_in  address;
+	fd_set readfds;
+
     #if defined(WIN32)
         int addrlen = sizeof(struct sockaddr_in);
 	#elif defined(__linux__) || defined(__FreeBSD__)
         socklen_t addrlen = sizeof(struct sockaddr_in);
-    #endif
+    #endif
+
     if((this->listener=socket(AF_INET,SOCK_STREAM,0))==-1)
     {
         cout << "TCP server Could not create socket\n" <<endl;
 		return NetworkError_SocketError;
-    }
+    }
+
 	#if defined(WIN32)
 	if ((setsockopt(this->listener, SOL_SOCKET, SO_REUSEADDR,(char*) &on, sizeof(int)))<0)
 	{
@@ -150,7 +156,8 @@ int TcpServer::server_loop()
 	else
 	{
 		cout << "TCP Server Socket created" << endl;
-	}
+	}
+
 	#elif defined(__linux__) || defined(__FreeBSD__)
 	if((setsockopt(this->listener,SOL_SOCKET,SO_REUSEADDR,&on,sizeof(int)))<0)
     {
@@ -161,10 +168,12 @@ int TcpServer::server_loop()
     {
         cout << "TCP Server Socket created" << endl;
     }
-	#endif
+	#endif
+
 	address.sin_family = AF_INET;
 	address.sin_addr.s_addr = INADDR_ANY;
-	address.sin_port = htons(this->serverPort);
+	address.sin_port = htons(this->serverPort);
+
 	//Bind
 	if (bind(this->listener, (struct sockaddr *)&address, sizeof(address)) == -1)
 	{
@@ -174,33 +183,40 @@ int TcpServer::server_loop()
 	else
     {
         cout <<"TCP Socket Binded"<<endl;
-    }
-    listen(this->listener, this->maxClient);
+    }
+
+    listen(this->listener, this->maxClient);
+
     FD_ZERO(&this->master);
 	FD_ZERO(&readfds);
     FD_SET(this->listener, &this->master);
-    fdmax=this->listener;
+    fdmax=this->listener;
+
     while(1)
     {
 		//Add new connection into set
 		readfds = this->master;
-		activity = select(fdmax+1, &readfds, NULL, NULL, NULL);
+		activity = select(fdmax+1, &readfds, NULL, NULL, NULL);
+
 		if (activity == -1)
 		{
 		    cout << "Main server select call failed" <<endl;
 			break;
-		}
+		}
+
         if (FD_ISSET(this->listener, &readfds))
 		{
 			if ((new_socket = accept(this->listener, (struct sockaddr *)&address, &addrlen))<0)
 			{
 			    cout << "Accept connection error" << endl;
 				break;
-			}
+			}
+
 			//inform user of socket number - used in send and receive commands
 			cout << "Main server has new connection , socket fd is" << new_socket
 			<<" Ip:" << inet_ntoa(address.sin_addr)
-			<<" Port:" <<ntohs(address.sin_port)<<endl;
+			<<" Port:" <<ntohs(address.sin_port)<<endl;
+
 			//add new socket to array of sockets
 			for (i = 0; i < this->maxClient; i++)
 			{
@@ -222,12 +238,14 @@ int TcpServer::server_loop()
 			{
 			    //get details of the client
 				getpeername(this->clientSockets->at(i), (struct sockaddr*)&address, &addrlen);
-				valread = recv(this->clientSockets->at(i), &buffer.at(0), this->maxReceiveBuffer, 0);
+				valread = recv(this->clientSockets->at(i), &buffer.at(0), this->maxReceiveBuffer, 0);
+
 				if (valread <= 0)
 				{
 					//Somebody disconnected , get his details and print
 					cout << "Main server got host disconnected ip:"<< inet_ntoa(address.sin_addr)
-					<< " Port:" << ntohs(address.sin_port) <<endl;					this->CutConnection(i);
+					<< " Port:" << ntohs(address.sin_port) <<endl;
+					this->CutConnection(i);
 				}
 				else if (valread>0)
 				{
@@ -237,7 +255,8 @@ int TcpServer::server_loop()
 		}
     }
     return NetworkError_UnknownError;
-}
+}
+
 
 
 /*

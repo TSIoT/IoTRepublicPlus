@@ -1,4 +1,5 @@
 #include "UdpServer.h"
+#include <stralign.h>
 
 UdpServer::UdpServer(int port, int maxSize)
 {
@@ -15,14 +16,14 @@ void UdpServer::StartServer()
 {
 	Thread_create(&this->serverThread, (TSThreadProc)UdpServer::server_main_loop_entry, this);
 	Thread_run(&this->serverThread);
-	puts("UDP server started");
+	//puts("UDP server started");
 }
 
 void UdpServer::StopServer()
 {
 	Thread_stop(&this->serverThread);
 	Thread_kill(&this->serverThread);
-	puts("UDP server stoped");
+	//puts("UDP server stoped");
 }
 
 void UdpServer::SendData(string ip, int port, std::vector<char> *sendData)

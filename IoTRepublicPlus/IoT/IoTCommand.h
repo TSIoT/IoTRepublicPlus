@@ -9,7 +9,7 @@ using namespace std;
 class IoTCommand
 {
 public:
-	enum command_t
+	enum CommandType
 	{
 		command_t_None = 0,
 		command_t_ReadRequest = 1,
@@ -18,10 +18,56 @@ public:
 		command_t_Management = 4,
 	};
 
-	command_t CmdType;
+	CommandType CmdType;
 	string ID;
 	string Value;
 	std::stringstream sendedData;
+
+
+	IoTCommand(CommandType cmdType, string id, string value)
+	{
+		this->ID = id;
+		this->Value = value;
+		this->CmdType = cmdType;
+
+		string templete = "{\"IOTCMD\":{\"Type\":\"None\",\"ID\":\"0\",\"Value\":\"0\"}}";
+		json_t *root;
+		root = JsonUtility::LoadJsonData(templete);
+		if (root != NULL)
+		{
+			string typeStr = "";
+			switch (this->CmdType)
+			{
+			case command_t_None:
+				typeStr = "None";
+				break;
+
+			case command_t_ReadRequest:
+				typeStr = "Req";
+				break;
+
+			case command_t_ReadResponse:
+				typeStr = "Res";
+				break;
+
+			case command_t_Write:
+				typeStr = "Wri";
+				break;
+
+			case command_t_Management:
+				typeStr = "Man";
+				break;
+
+			default:
+				break;
+			}			
+			JsonUtility::SetValueInFirstObject(root, "Type", typeStr);
+			JsonUtility::SetValueInFirstObject(root, "ID", this->ID);
+			JsonUtility::SetValueInFirstObject(root, "Value", this->Value);
+
+			sendedData << JsonUtility::ExportJsonContent(root);
+		}
+	}
 
 	IoTCommand(string content)
 	{

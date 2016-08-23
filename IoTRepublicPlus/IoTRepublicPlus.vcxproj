@@ -19,7 +19,11 @@
     </ProjectConfiguration>
   </ItemGroup>
   <ItemGroup>
+    <ClCompile Include="Broker\BrokerController.cpp" />
     <ClCompile Include="Broker\CloudBridge.cpp" />
+    <ClCompile Include="Broker\IBroker.cpp" />
+    <ClCompile Include="Broker\XBeeBroker_ApiMode.cpp" />
+    <ClCompile Include="Broker\XBee\XBeeApiLibrary.cpp" />
     <ClCompile Include="IoT\BrocastServer.cpp" />
     <ClCompile Include="IoT\IoTManager.cpp" />
     <ClCompile Include="IoT\IoTPackage.cpp" />
@@ -35,7 +39,11 @@
     <ClCompile Include="Utility\thread.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="Broker\BrokerController.h" />
     <ClInclude Include="Broker\CloudBridge.h" />
+    <ClInclude Include="Broker\IBroker.h" />
+    <ClInclude Include="Broker\XBeeBroker_ApiMode.h" />
+    <ClInclude Include="Broker\XBee\XBeeApiLibrary.h" />
     <ClInclude Include="IoT\BrocastServer.h" />
     <ClInclude Include="IoT\IoTCommand.h" />
     <ClInclude Include="IoT\IoTManager.h" />
@@ -128,7 +136,7 @@
     <Link>
       <SubSystem>Console</SubSystem>
       <GenerateDebugInformation>true</GenerateDebugInformation>
-      <AdditionalLibraryDirectories>C:\Users\loki.chuang\Documents\Visual Studio 2015\Projects\IoTRepublicPlus\IoTRepublicPlus\jansson;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
+      <AdditionalLibraryDirectories>./jansson;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
       <AdditionalDependencies>jansson_d.lib;%(AdditionalDependencies)</AdditionalDependencies>
     </Link>
   </ItemDefinitionGroup>
@@ -162,7 +170,7 @@
       <GenerateDebugInformation>true</GenerateDebugInformation>
       <EnableCOMDATFolding>true</EnableCOMDATFolding>
       <OptimizeReferences>true</OptimizeReferences>
-      <AdditionalLibraryDirectories>C:\Users\loki.chuang\Documents\Visual Studio 2015\Projects\IoTRepublicPlus\IoTRepublicPlus\jansson;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
+      <AdditionalLibraryDirectories>./jansson;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
       <AdditionalDependencies>jansson_d.lib;%(AdditionalDependencies)</AdditionalDependencies>
     </Link>
   </ItemDefinitionGroup>
