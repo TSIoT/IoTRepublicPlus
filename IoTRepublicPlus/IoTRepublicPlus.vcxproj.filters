@@ -53,6 +53,39 @@
     <ClCompile Include="Broker\IBroker.cpp">
       <Filter>Broker</Filter>
     </ClCompile>
+    <ClCompile Include="jansson2.7\dump.c">
+      <Filter>jansson2.7</Filter>
+    </ClCompile>
+    <ClCompile Include="jansson2.7\error.c">
+      <Filter>jansson2.7</Filter>
+    </ClCompile>
+    <ClCompile Include="jansson2.7\hashtable.c">
+      <Filter>jansson2.7</Filter>
+    </ClCompile>
+    <ClCompile Include="jansson2.7\hashtable_seed.c">
+      <Filter>jansson2.7</Filter>
+    </ClCompile>
+    <ClCompile Include="jansson2.7\load.c">
+      <Filter>jansson2.7</Filter>
+    </ClCompile>
+    <ClCompile Include="jansson2.7\memory.c">
+      <Filter>jansson2.7</Filter>
+    </ClCompile>
+    <ClCompile Include="jansson2.7\pack_unpack.c">
+      <Filter>jansson2.7</Filter>
+    </ClCompile>
+    <ClCompile Include="jansson2.7\strbuffer.c">
+      <Filter>jansson2.7</Filter>
+    </ClCompile>
+    <ClCompile Include="jansson2.7\strconv.c">
+      <Filter>jansson2.7</Filter>
+    </ClCompile>
+    <ClCompile Include="jansson2.7\utf.c">
+      <Filter>jansson2.7</Filter>
+    </ClCompile>
+    <ClCompile Include="jansson2.7\value.c">
+      <Filter>jansson2.7</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <Filter Include="Utility">
@@ -69,6 +102,9 @@
     </Filter>
     <Filter Include="Broker\XBee">
       <UniqueIdentifier>{e535801f-d01c-44f3-9e37-e06a614310cc}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="jansson2.7">
+      <UniqueIdentifier>{cf14f99e-28a6-4ee6-80c6-0a9b86b25b02}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
   <ItemGroup>
@@ -128,6 +164,27 @@
     </ClInclude>
     <ClInclude Include="Broker\XBee\XBeeApiLibrary.h">
       <Filter>Broker\XBee</Filter>
+    </ClInclude>
+    <ClInclude Include="jansson2.7\hashtable.h">
+      <Filter>jansson2.7</Filter>
+    </ClInclude>
+    <ClInclude Include="jansson2.7\jansson.h">
+      <Filter>jansson2.7</Filter>
+    </ClInclude>
+    <ClInclude Include="jansson2.7\jansson_config.h">
+      <Filter>jansson2.7</Filter>
+    </ClInclude>
+    <ClInclude Include="jansson2.7\jansson_private.h">
+      <Filter>jansson2.7</Filter>
+    </ClInclude>
+    <ClInclude Include="jansson2.7\lookup3.h">
+      <Filter>jansson2.7</Filter>
+    </ClInclude>
+    <ClInclude Include="jansson2.7\strbuffer.h">
+      <Filter>jansson2.7</Filter>
+    </ClInclude>
+    <ClInclude Include="jansson2.7\utf.h">
+      <Filter>jansson2.7</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>

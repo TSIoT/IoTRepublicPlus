@@ -12,17 +12,10 @@
 #include <stdlib.h>  /* for size_t */
 #include <stdarg.h>
 
-#if defined(WIN32)
 #include "jansson_config.h"
 
-#elif defined(__linux__) || defined(__FreeBSD__)
-#include <jansson_config.h>
-
-#endif
-
 #ifdef __cplusplus
-extern "C" 
-{
+extern "C" {
 #endif
 
 /* version */
@@ -39,10 +32,11 @@ extern "C"
 #define JANSSON_VERSION_HEX  ((JANSSON_MAJOR_VERSION << 16) |   \
                               (JANSSON_MINOR_VERSION << 8)  |   \
                               (JANSSON_MICRO_VERSION << 0))
+
+
 /* types */
 
-typedef enum 
-{
+typedef enum {
     JSON_OBJECT,
     JSON_ARRAY,
     JSON_STRING,
@@ -53,8 +47,7 @@ typedef enum
     JSON_NULL
 } json_type;
 
-typedef struct json_t 
-{
+typedef struct json_t {
     json_type type;
     size_t refcount;
 } json_t;

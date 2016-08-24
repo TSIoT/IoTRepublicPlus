@@ -170,7 +170,13 @@ void IoTManager::commandHandler(int socketIndex,IoTCommand *cmd, IoTPackage *pac
 {
 	if (cmd->ID == "Dis_All")
 	{
+		std::vector<char> buffer = this->encodeAllRegistedDevices();
+		//IoTPackage *sendPackage = new IoTPackage(this->currentVersion, this->ServerIoTIP, package->SorIp, &buffer[0], buffer.size());
+		IoTPackage *sendPackage = new IoTPackage(this->currentVersion, this->ServerIoTIP, package->SorIp, &buffer);
 
+		//this->SendDataToExistsConnection(socketIndex, sendPackage->DataForSending, sendPackage->SendLength);
+		this->SendDataToExistsConnection(socketIndex, &sendPackage->DataVectorForSending[0], sendPackage->DataVectorForSending.size());
+		delete sendPackage;
 	}
 	else if (cmd->ID == "Dis_NPx")
 	{
@@ -215,6 +221,24 @@ string IoTManager::getNewIoTIP()
 	return newIp.str();
 }
 
+void IoTManager::noticeUIToReloadDeviceList()
+{	
+	int deviceSize = this->registed_devices->size();
+	
+	IoTCommand reloadRequest(IoTCommand::command_t_Management, "Rel_Req", "0");	
+
+	for (int i = 0; i < deviceSize; i++)
+	{
+		if (this->registed_devices->at(i).FunctionGroup == "UI")
+		{
+			IoTPackage package(this->currentVersion, this->ServerIoTIP, this->registed_devices->at(i).IoTIp, reloadRequest.sendedData.str());
+			this->SendDataToExistsConnection(this->registed_devices->at(i).SocketIndex, &package.DataVectorForSending);			
+		}
+	}
+	
+
+}
+
 //device info
 void IoTManager::addNewDevice(string iotip, json_t *root, int socketIndex)
 {
@@ -232,7 +256,37 @@ void IoTManager::addNewDevice(string iotip, json_t *root, int socketIndex)
 		cout << newDevice->DeviceID << "is already exists!!update the exists device infomation" << endl;
 		this->registed_devices->erase(this->registed_devices->begin()+deviceIndex);
 	}
-	this->registed_devices->push_back(*newDevice);
+	this->registed_devices->push_back(*newDevice);	
+}
+
+void IoTManager::removeDeviceBySocketIndex(int socketIndex)
+{	
+	int deviceSize = this->registed_devices->size();
+
+	for (int i = 0; i < deviceSize; i++)
+	{
+		if (this->registed_devices->at(i).SocketIndex == socketIndex)
+		{
+			this->registed_devices->erase(this->registed_devices->begin() + i);
+			deviceSize--;
+			i--;
+		}
+	}	
+}
+
+void IoTManager::removeDeviceByIoTIp(string iotIp)
+{
+	int deviceSize = this->registed_devices->size();
+
+	for (int i = 0; i < deviceSize; i++)
+	{
+		if (this->registed_devices->at(i).IoTIp == iotIp)
+		{
+			this->registed_devices->erase(this->registed_devices->begin() + i);
+			deviceSize--;
+			i--;
+		}
+	}
 }
 
 int IoTManager::findDeviceIndexByDeviceId(string id)
@@ -267,6 +321,23 @@ int IoTManager::findDeviceIndexByIoTIp(string iotIp)
 	}
 
 	return index;
+}
+
+bool IoTManager::isSocketIndexExistsAnyDevice(int socketIndex)
+{
+	bool exists = 0;
+	int deviceSize = this->registed_devices->size();
+
+	for (int i = 0; i < deviceSize; i++)
+	{
+		if (this->registed_devices->at(i).SocketIndex == socketIndex)
+		{
+			exists = 1;
+			break;
+		}
+	}
+
+	return exists;
 }
 
 std::vector<char> IoTManager::encodeAllRegistedDevices()
@@ -319,5 +390,17 @@ void IoTManager::Event_ReceivedData(int socketIndex, std::vector<char> *buffer, 
     //printAllChar(&this->packageBuffer[socketIndex].CharVector.at(0),dataLength);
     //cout << "Received:" << string(&this->packageBuffer[socketIndex].CharVector.at(0)) <<endl;
 	this->handlePackage(socketIndex);
+}
+
+void IoTManager::Event_ConnectionDenied(int socketIndex)
+{	
+	cout << "Found denied connection" << endl;
+	bool haveDevice = this->isSocketIndexExistsAnyDevice(socketIndex);
+	if (haveDevice)
+	{
+		this->removeDeviceBySocketIndex(socketIndex);
+		//this->noticeUIToReloadDeviceList();
+	}
+	
 }
 

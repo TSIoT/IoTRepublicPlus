@@ -28,6 +28,17 @@
     <ClCompile Include="IoT\IoTManager.cpp" />
     <ClCompile Include="IoT\IoTPackage.cpp" />
     <ClCompile Include="IoT\IoTUtility.cpp" />
+    <ClCompile Include="jansson2.7\dump.c" />
+    <ClCompile Include="jansson2.7\error.c" />
+    <ClCompile Include="jansson2.7\hashtable.c" />
+    <ClCompile Include="jansson2.7\hashtable_seed.c" />
+    <ClCompile Include="jansson2.7\load.c" />
+    <ClCompile Include="jansson2.7\memory.c" />
+    <ClCompile Include="jansson2.7\pack_unpack.c" />
+    <ClCompile Include="jansson2.7\strbuffer.c" />
+    <ClCompile Include="jansson2.7\strconv.c" />
+    <ClCompile Include="jansson2.7\utf.c" />
+    <ClCompile Include="jansson2.7\value.c" />
     <ClCompile Include="main.cpp" />
     <ClCompile Include="Network\TcpClient.cpp" />
     <ClCompile Include="Network\TcpServer.cpp" />
@@ -49,6 +60,13 @@
     <ClInclude Include="IoT\IoTManager.h" />
     <ClInclude Include="IoT\IoTPackage.h" />
     <ClInclude Include="IoT\IoTUtility.h" />
+    <ClInclude Include="jansson2.7\hashtable.h" />
+    <ClInclude Include="jansson2.7\jansson.h" />
+    <ClInclude Include="jansson2.7\jansson_config.h" />
+    <ClInclude Include="jansson2.7\jansson_private.h" />
+    <ClInclude Include="jansson2.7\lookup3.h" />
+    <ClInclude Include="jansson2.7\strbuffer.h" />
+    <ClInclude Include="jansson2.7\utf.h" />
     <ClInclude Include="Network\TcpClient.h" />
     <ClInclude Include="Network\TcpServer.h" />
     <ClInclude Include="Network\UdpServer.h" />
@@ -136,8 +154,8 @@
     <Link>
       <SubSystem>Console</SubSystem>
       <GenerateDebugInformation>true</GenerateDebugInformation>
-      <AdditionalLibraryDirectories>./jansson;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
-      <AdditionalDependencies>jansson_d.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <AdditionalLibraryDirectories>%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
+      <AdditionalDependencies>%(AdditionalDependencies)</AdditionalDependencies>
     </Link>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
@@ -170,8 +188,8 @@
       <GenerateDebugInformation>true</GenerateDebugInformation>
       <EnableCOMDATFolding>true</EnableCOMDATFolding>
       <OptimizeReferences>true</OptimizeReferences>
-      <AdditionalLibraryDirectories>./jansson;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
-      <AdditionalDependencies>jansson_d.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <AdditionalLibraryDirectories>%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
+      <AdditionalDependencies>%(AdditionalDependencies)</AdditionalDependencies>
     </Link>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">

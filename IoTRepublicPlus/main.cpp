@@ -15,12 +15,12 @@
 
 using namespace std;
 
-//#define ActiveBrocastServer
-#define ActiveIoTManager
+//#define BrocastServer_
+#define IoTManager_
 
-#define ActiveBroker
-#define ActiveXBeeBroker_api
-//#define ActiveCloudBridge
+#define Broker
+#define XBeeBroker_api
+//#define CloudBridge_
 
 
 int main()
@@ -47,24 +47,24 @@ int main()
 	int maxReceiveBuffer = 2000;
 	int maxClientOfManager = 500;
 
-#ifdef ActiveBrocastServer
+#ifdef BrocastServer_
 	BrocastServer brocastServer(brocastPort, maxReceiveBuffer);
 	brocastServer.StartServer();	
 	ms_sleep(100);
 #endif
 
-#ifdef ActiveIoTManager
+#ifdef IoTManager_
 	IoTManager manager(managerPort, maxReceiveBuffer, maxClientOfManager);
 	manager.StartManager();
 	ms_sleep(100);
 #endif
 
-#ifdef ActiveBroker
+#ifdef Broker
 	//Broker
 	string managerIp("127.0.0.1");	
 	BrokerController brokerController;
 	
-	#ifdef ActiveXBeeBroker_api
+	#ifdef XBeeBroker_api
 		//XBee broker
 		int comNumber = 28;
 		int baudRate = 9600;
@@ -74,7 +74,7 @@ int main()
 		brokerController.AddBroker(xbeeBroker);
 	#endif
 	
-	#ifdef ActiveCloudBridge
+	#ifdef CloudBridge
 		int cloudServerPort = 6210;
 		string cloudServerIp = "104.199.183.220";
 		CloudBridge cloudBroker(cloudServerIp, cloudServerPort, maxReceiveBuffer);
@@ -87,20 +87,29 @@ int main()
 
 #endif
 
+#ifdef CloudBridge_
+	CloudBridge cloudBroker("104.199.183.220", managerPort, maxReceiveBuffer);
+	cloudBroker.Login("DDR", "AAA");
+#endif
+
 
 	PAUSE;
 
 
-#ifdef ActiveCloudBridge
+#ifdef CloudBridge_
 	cloudBroker.Logout();
 #endif
 
-#ifdef ActiveIoTManager
-	manager.StopManager();	
+#ifdef Broker
+	brokerController.StopAllBroker();
 #endif
 
-#ifdef ActiveBroker
-	brokerController.StopAllBroker();
+#ifdef IoTManager_
+	manager.StopManager();
+#endif
+
+#ifdef BrocastServer_
+	brocastServer.StopServer();	
 #endif
 	
 	return 0;

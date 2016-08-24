@@ -77,15 +77,22 @@ private:
 
 	string getNewIoTIP();
 
+	//IoT Netwrok maintain
+	void noticeUIToReloadDeviceList();
+
 	//device info
 	void addNewDevice(string iotip, json_t *root, int socketIndex);
+	void removeDeviceBySocketIndex(int socketIndex);
+	void removeDeviceByIoTIp(string iotIp);
 	int findDeviceIndexByDeviceId(string id);
 	int findDeviceIndexByIoTIp(string iotIp);
+	bool isSocketIndexExistsAnyDevice(int socketIndex);
 	std::vector<char> encodeAllRegistedDevices();
 
 	//override TcpServer class event
 	//void Event_ReceivedData(int socketIndex, char *buffer, int dataLength);
 	void Event_ReceivedData(int socketIndex, std::vector<char> *buffer, int dataLength);
+	void Event_ConnectionDenied(int socketIndex);
 };
 
 

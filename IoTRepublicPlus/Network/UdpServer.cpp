@@ -1,5 +1,5 @@
 #include "UdpServer.h"
-#include <stralign.h>
+#include <string.h>
 
 UdpServer::UdpServer(int port, int maxSize)
 {
