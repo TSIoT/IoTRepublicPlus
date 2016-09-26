@@ -37,9 +37,12 @@ void XBeeBroker_ApiMode::Start()
 	{
 		this->IsStarted = 1;
 		this->ScanAllDevice();
-		this->brokerRegister();
 		Thread_create(&this->mainLoopThread, (TSThreadProc)XBeeBroker_ApiMode::server_main_loop_entry, this);
 		Thread_run(&this->mainLoopThread);
+
+
+		this->brokerRegister();
+		
 	}	
 }
 
@@ -55,7 +58,7 @@ void XBeeBroker_ApiMode::Stop()
 void XBeeBroker_ApiMode::ScanAllDevice()
 {
 	const string cmdDiscover = "ND";
-	const int maxFailTimes = 5;
+	const int maxFailTimes = 6;
 	const int maxAddressLength = 8;
 
 	RecvResult recvResult;
@@ -78,8 +81,7 @@ void XBeeBroker_ApiMode::ScanAllDevice()
 		recvResult = this->recvResponse(&recvBuffer, XBeeResponseType_AtCommand);
 		if (recvResult == RecvResult_Succeed)
 		{
-			cout << "Found XBee device" << endl;
-			failTimes = 0;
+			cout << "Found XBee device" << endl;			
 			dh = 0, dl = 0;
 
 			for (int i = 0; i < maxAddressLength / 2; i++)
@@ -254,14 +256,14 @@ void XBeeBroker_ApiMode::handleForwardingPackage(IoTPackage *package)
 		bufferToEndDevice.insert(bufferToEndDevice.begin(), cmdFromManager->ID.begin(), cmdFromManager->ID.end());
 		this->sendData(address, &bufferToEndDevice);
 
-
 		res = this->getResponse(&bufferFromEndDevice, recvWaitTime);
+		//res = this->recvData(&bufferFromEndDevice, recvWaitTime);
 	}
 
 	//forwarding the response to manager
 	if (res == RecvResult_Succeed && bufferFromEndDevice.size() > 0)
 	{
-		string value(bufferFromEndDevice.begin(), bufferFromEndDevice.end());
+		string value(bufferFromEndDevice.begin()+1, bufferFromEndDevice.end()-1); //ignore start-symbol and end-symbol
 		cmdToManager = new IoTCommand(IoTCommand::command_t_ReadResponse, cmdFromManager->ID, value);
 		string sendDataStr = cmdToManager->sendedData.str();
 		std::vector<char> sendData(sendDataStr.begin(), sendDataStr.end());
@@ -291,7 +293,7 @@ void XBeeBroker_ApiMode::handleManagerPackage(IoTPackage *package)
 
 //Broker Manager function
 void XBeeBroker_ApiMode::brokerRegister()
-{
+{	
 	this->selfIoTIp = this->askIoTIp();
 	string selfDescription = "{\"IOTDEV\":{\"DeviceName\":\"XBee Broker\",\"FunctionGroup\":\"Broker\",\"DeviceID\":\"iotrepublic.broker.xbee_api1\",\"Component\":[{\"ID\":\"rescan\",\"Group\":\"1\",\"Name\":\"Re-Scan All\",\"Type\":\"Button\"}]}}";
 	std::vector<char> sendData(selfDescription.begin(), selfDescription.end());

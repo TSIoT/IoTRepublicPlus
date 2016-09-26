@@ -10,9 +10,11 @@
 #include "IoTUtility.h"
 #include "IoTCommand.h"
 
+#include "Ruler.h"
+
 using namespace std;
 
-class  IoTManager:public TcpServer
+class  IoTManager: public Ruler, public TcpServer
 {
 public:
 	 IoTManager(int port, int maxReceiveBuffer, int maxClient);
@@ -20,14 +22,16 @@ public:
 
 	void StartManager();
 	void StopManager();
+	
 
 	bool IsStarted;
 
 private:
 	string ServerIoTIP="Master";
-	string currentVersion = "IUDP1.0";
+	//string currentVersion = "IUDP1.0";
 	string prefix = "DEV.";
 	int ip_count = 0;
+	//Ruler ruler;
 
 	//definiction(the classes only used in this class)
 	class IoTDeviceInfo
@@ -62,7 +66,7 @@ private:
 
 	//class instance
 	IoTUtility *ioTUtility;
-	//JsonUtility *jsonUtility;
+	
 
 	//members
 	std::vector<IoTDeviceInfo> *registed_devices;
@@ -78,7 +82,7 @@ private:
 	string getNewIoTIP();
 
 	//IoT Netwrok maintain
-	void noticeUIToReloadDeviceList();
+	void noticeReloadDeviceList();
 
 	//device info
 	void addNewDevice(string iotip, json_t *root, int socketIndex);
@@ -89,10 +93,15 @@ private:
 	bool isSocketIndexExistsAnyDevice(int socketIndex);
 	std::vector<char> encodeAllRegistedDevices();
 
+	//ruler function
+	void excuteReadRule(RuleInstance *ruleInstance) override;
+	void excuteWriteRule(RuleInstance *ruleInstance, string writeValue) override;
+
+
 	//override TcpServer class event
 	//void Event_ReceivedData(int socketIndex, char *buffer, int dataLength);
-	void Event_ReceivedData(int socketIndex, std::vector<char> *buffer, int dataLength);
-	void Event_ConnectionDenied(int socketIndex);
+	void Event_ReceivedData(int socketIndex, std::vector<char> *buffer, int dataLength) override;
+	void Event_ConnectionDenied(int socketIndex) override;
 };
 
 

@@ -23,17 +23,19 @@ public:
 	void SendData(string buffer);
 	void SendData(std::vector<char> *buffer);
 
-	void RecviveData(std::vector<char> *buffer);
+	int RecviveData(std::vector<char> *buffer);
 
 	void StartListen();
 	void StopListen();
+
+	TSSocket clientSocket;
 
 protected:
 	string targetIp;
 	int serverPort, maxReceiveBuffer;	
 
 private:
-	TSSocket clientSocket;	
+	
 	TSThread clientThread;
 
 	void initClient();

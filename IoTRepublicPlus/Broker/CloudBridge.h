@@ -5,26 +5,34 @@
 #include "../Network/TcpClient.h"
 #include "../Utility/NetworkUtility.h"
 #include "../Utility/thread.h"
+#include "IBroker.h"
 
 using namespace std;
 
 
-class CloudBridge
+class CloudBridge:public IBroker
 {
 public:
-	CloudBridge(string targetIp, int port, int maxRecvSize);
+	CloudBridge(string targetIp, int port, int maxRecvSize, string name, BrokerType type);
 	~CloudBridge();
+
+	
 
 	bool IsLoggeed;
 
 	NetworkError Login(string id, string password);
-	void Logout();
+	void Start();
+	void Stop();	
+	
+	void ScanAllDevice();
 	
 private:	
 	TcpClient *socketToCloud;
 	TcpClient *socketToManager;
 	TSThread cloudThread;
 	TSThread managerThread;
+	static TSMutex mutexLock;
+
 
 	string managerIp = "127.0.0.1";
 	int managerPort = 6210;
@@ -50,6 +58,8 @@ private:
 
 	void managerLoop();
 	void cloudLoop();
+
+	bool reconnectToManager(std::vector<char> *dataVector);
 };
 
 #endif

@@ -1,14 +1,20 @@
 #include "CloudBridge.h"
 #include "../Utility/JsonUtility.h"
 #include "../Utility/SystemUtility.h"
+#include "../IoT/IoTUtility.h"
 #include <sstream>
 
-CloudBridge::CloudBridge(string targetIp, int port, int maxRecvSize)
+
+TSMutex CloudBridge::mutexLock;
+
+CloudBridge::CloudBridge(string targetIp, int port, int maxRecvSize,string name, BrokerType type) :IBroker(name, type, this->managerIoTIp, this->managerPort)
 {
 	this->maxRecvSize = maxRecvSize;
 	this->socketToCloud = new TcpClient(targetIp, port, maxRecvSize);
 	
 	this->IsLoggeed = 0;
+
+	Mutex_create(&CloudBridge::mutexLock);
 }
 
 
@@ -30,7 +36,7 @@ NetworkError CloudBridge::Login(string id, string password)
 		{
 			errorCode = NetworkError_NoError;
 			this->IsLoggeed = 1;
-			this->startListener();
+
 		}
 		else if (loginError==LoginError_IdError)
 		{
@@ -41,13 +47,22 @@ NetworkError CloudBridge::Login(string id, string password)
 		{
 			cout << "password is incorrect" << endl;
 			errorCode = NetworkError_LoginError;
-		}		
+		}
+		else
+		{
+			errorCode = NetworkError_UnknownError;;
+		}
 	}	
 	
 	return errorCode;
 }
 
-void CloudBridge::Logout()
+void CloudBridge::Start()
+{
+	this->startListener();
+}
+
+void CloudBridge::Stop()
 {
 	//this->socketToCloud->Disconnect();
 	if (this->IsLoggeed)
@@ -55,6 +70,11 @@ void CloudBridge::Logout()
 		//this->socketToManager->Disconnect();
 		this->stopListener();
 	}	
+}
+
+void CloudBridge::ScanAllDevice()
+{
+
 }
 
 //private
@@ -106,6 +126,9 @@ CloudBridge::LoginError CloudBridge::checkLoginInfo(string id, string password)
 		cout << "login failed" << endl;
 		errorCode = LoginError_UnknownError;		
 	}
+
+	//json_decref(root);
+	//delete root;
 	
 	return errorCode;
 }
@@ -121,7 +144,7 @@ void CloudBridge::startListener()
 
 void CloudBridge::stopListener()
 {
-	cout << "Stop all listener" << endl;
+	cout << "Cloud bridge Stop all listener" << endl;
 	
 	Thread_stop(&this->cloudThread);
 	Thread_kill(&this->cloudThread);
@@ -143,6 +166,7 @@ void CloudBridge::cloudSocketLoopEntry(CloudBridge *clientObj)
 
 void CloudBridge::managerLoop()
 {
+	
 	cout << "Start manager listener" << endl;	
 	this->socketToManager = new TcpClient(this->managerIp,this->managerPort , this->maxRecvSize);
 	this->socketToManager->Connect();
@@ -151,35 +175,93 @@ void CloudBridge::managerLoop()
 	recvBuffer.reserve(this->maxRecvSize);
 	
 	while (1)
-	{
+	{		
 		this->socketToManager->RecviveData(&recvBuffer);
 		if (recvBuffer.size()>0)
 		{
-			cout << "Receive form manager, forwarding to Cloud" << endl;
-			
-
+			//Mutex_lock(&CloudBridge::mutexLock);
+			//cout << "Receive form manager, forwarding to Cloud" << endl;			
 			this->socketToCloud->SendData(&recvBuffer);
 			recvBuffer.clear();
+			//Mutex_unlock(&CloudBridge::mutexLock);
 		}
+		
+		//cout << "free" << endl;
 	}
 }
 
 void CloudBridge::cloudLoop()
 {
 	cout << "Start cloud listener" << endl;
+
+	IoTUtility ioTUtility(IoTPackage::ProtocolVersion, IoTPackage::SegmentSymbol);
+
 	std::vector<char> recvBuffer;
+	std::vector<char> packageBuffer;
+	packageBuffer.reserve(this->maxRecvSize);
 	recvBuffer.reserve(this->maxRecvSize);
+
+	IoTPackage *package = NULL;
+	bool needReconnect = 0;
 
 	while (1)
 	{
 		this->socketToCloud->RecviveData(&recvBuffer);
 		if (recvBuffer.size()>0)
 		{
-			cout << "Receive form Cloud, forwarding to manager" << endl;
-			this->socketToManager->SendData(&recvBuffer);
-			recvBuffer.clear();
+			packageBuffer.insert(packageBuffer.end(), recvBuffer.begin(), recvBuffer.end());
+			IoTUtility::GetPackageError error;
+			do
+			{
+				package = ioTUtility.GetCompletedPackage(&packageBuffer, &error);
+				if (error == IoTUtility::GetPackageError_NoError)
+				{
+					needReconnect = this->reconnectToManager(&package->DataVector);
+					if (needReconnect)
+					{
+						
+					}
+					else
+					{
+						this->socketToManager->SendData(&package->DataVectorForSending);
+					}
+				}
+
+				//cout << "Receive form Cloud, forwarding to manager" << endl;
+				//this->socketToManager->SendData(&recvBuffer);
+				recvBuffer.clear();
+				delete package;
+			} while (error == IoTUtility::GetPackageError_NoError);
+			
 		}
 	}
+}
+
+
+bool CloudBridge::reconnectToManager(std::vector<char> *dataVector)
+{
+	bool needToReconnect = 0;
+	if (dataVector->size() == 6)
+	{
+		string content(dataVector->begin(), dataVector->end());
+		if (content == "discon")
+		{
+			needToReconnect = 1;
+			cout << "Discon!" << endl;
+			//restart the socket path to manager
+			//Mutex_lock(&CloudBridge::mutexLock);
+			this->socketToManager->Disconnect();
+			Thread_stop(&this->managerThread);
+			Thread_kill(&this->managerThread);
+			Thread_create(&this->managerThread, (TSThreadProc)CloudBridge::managerSocketLoopEntry, this);
+			Thread_run(&this->managerThread);
+			//Mutex_unlock(&CloudBridge::mutexLock);
+			cout << "Discon over" << endl;
+		}
+
+	}
+
+	return needToReconnect;
 }
 
 

@@ -17,6 +17,7 @@ class IoTPackage
 {
 public:
 	static const char SegmentSymbol;
+	static const string ProtocolVersion;
 
 	bool IsCompletedPackage;
 	string Ver;
@@ -145,6 +146,63 @@ public:
 		this->PacketToSendingVector();
 
 	};
+
+	IoTPackage(string soIp, string desIp, std::vector<char> *data)
+	{
+		int headerLength = 0;
+		stringstream tempStream;
+
+		this->IsCompletedPackage = 1;
+		this->Ver = IoTPackage::ProtocolVersion;
+		this->SorIp = soIp;
+		this->DesIp = desIp;
+
+		headerLength += this->Ver.length() + 1; //1 is for segment symbol
+		headerLength += this->SorIp.length() + 1; //1 is for segment symbol
+		headerLength += this->DesIp.length() + 1; //1 is for segment symbol
+
+		if (data == NULL)
+		{
+			this->DataLength = 0;
+		}
+		else
+		{
+			this->DataLength = data->size();
+		}
+
+		tempStream << this->DataLength;
+		//cout << "DataLength:" << tempStream.str() << endl;
+		headerLength += tempStream.str().length() + 1;//1 is for segment symbol
+
+		if (headerLength <= 8)
+		{
+			headerLength += 1;
+		}
+		else if (headerLength <= 97)
+		{
+			headerLength += 2;
+		}
+		else
+		{
+			headerLength += 3;
+		}
+		headerLength++; //for segment symbol
+
+		this->HeaderLength = headerLength;
+
+		if (data != NULL)
+		{
+			this->DataLength = data->size();
+			this->DataVector.reserve(data->size());
+			this->DataVector.swap(*data);
+		}
+
+		//this->Data = new char[dataLength];
+		//memcpy(this->Data, data, dataLength);
+
+		this->PacketToSendingVector();
+
+	};
 	
 	IoTPackage(string ver, string soIp, string desIp, string data)
 	{
@@ -153,6 +211,57 @@ public:
 
 		this->IsCompletedPackage = 1;
 		this->Ver = ver;
+		this->SorIp = soIp;
+		this->DesIp = desIp;
+
+		headerLength += this->Ver.length() + 1; //1 is for segment symbol
+		headerLength += this->SorIp.length() + 1; //1 is for segment symbol
+		headerLength += this->DesIp.length() + 1; //1 is for segment symbol
+
+
+		this->DataLength = data.size();
+
+
+		tempStream << this->DataLength;
+		//cout << "DataLength:" << tempStream.str() << endl;
+		headerLength += tempStream.str().length() + 1;//1 is for segment symbol
+
+		if (headerLength <= 8)
+		{
+			headerLength += 1;
+		}
+		else if (headerLength <= 97)
+		{
+			headerLength += 2;
+		}
+		else
+		{
+			headerLength += 3;
+		}
+		headerLength++; //for segment symbol
+
+		this->HeaderLength = headerLength;
+
+
+
+		this->DataVector.reserve(this->DataLength);
+		this->DataVector.insert(this->DataVector.begin(), data.begin(), data.end());
+
+
+		//this->Data = new char[dataLength];
+		//memcpy(this->Data, data, dataLength);
+
+		this->PacketToSendingVector();
+
+	};
+
+	IoTPackage(string soIp, string desIp, string data)
+	{
+		int headerLength = 0;
+		stringstream tempStream;
+
+		this->IsCompletedPackage = 1;
+		this->Ver = IoTPackage::ProtocolVersion;
 		this->SorIp = soIp;
 		this->DesIp = desIp;
 

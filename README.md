@@ -1,9 +1,11 @@
 # IoTRepublicPlus
 A IoT Manager server implemnted by C++.<br>
 OS support:Windows and Linux<br>
+
 Library Dependncy:<br>
 curl:https://curl.haxx.se/<br>
 jannson:https://jansson.readthedocs.io/en/2.7/index.html<br>
+(library jansson has been integrated into source code)
 
 The reserved manager command id as below:
 (the proxy releated function is not implemete yet)
@@ -20,5 +22,5 @@ The reserved manager command id as below:
 <tr><td>Del_Dev<td>Delete device(by IoT Ip)<td>Y<td>N
 <tr><td>Prx_Add<td>Add proxied device(by IoT Ip)<td>Y<td>N
 <tr><td>Prx_Rmv<td>Remove proxied device(by IoT Ip)<td>Y<td>N
-<tr><td>Rel_Req<td>notice need reload device list<td>Y<td>Y
+<tr><td>Rel_Req<td>notice UI need to reload device list<td>Y<td>Y
 </table>

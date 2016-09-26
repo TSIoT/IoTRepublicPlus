@@ -21,13 +21,18 @@
   <ItemGroup>
     <ClCompile Include="Broker\BrokerController.cpp" />
     <ClCompile Include="Broker\CloudBridge.cpp" />
+    <ClCompile Include="Broker\CloudUploader.cpp" />
+    <ClCompile Include="Broker\FakeBroker.cpp" />
     <ClCompile Include="Broker\IBroker.cpp" />
     <ClCompile Include="Broker\XBeeBroker_ApiMode.cpp" />
     <ClCompile Include="Broker\XBee\XBeeApiLibrary.cpp" />
     <ClCompile Include="IoT\BrocastServer.cpp" />
+    <ClCompile Include="IoT\IoTComponent.cpp" />
+    <ClCompile Include="IoT\IoTDevice.cpp" />
     <ClCompile Include="IoT\IoTManager.cpp" />
     <ClCompile Include="IoT\IoTPackage.cpp" />
     <ClCompile Include="IoT\IoTUtility.cpp" />
+    <ClCompile Include="IoT\Ruler.cpp" />
     <ClCompile Include="jansson2.7\dump.c" />
     <ClCompile Include="jansson2.7\error.c" />
     <ClCompile Include="jansson2.7\hashtable.c" />
@@ -52,14 +57,20 @@
   <ItemGroup>
     <ClInclude Include="Broker\BrokerController.h" />
     <ClInclude Include="Broker\CloudBridge.h" />
+    <ClInclude Include="Broker\CloudUploader.h" />
+    <ClInclude Include="Broker\FakeBroker.h" />
     <ClInclude Include="Broker\IBroker.h" />
     <ClInclude Include="Broker\XBeeBroker_ApiMode.h" />
     <ClInclude Include="Broker\XBee\XBeeApiLibrary.h" />
     <ClInclude Include="IoT\BrocastServer.h" />
     <ClInclude Include="IoT\IoTCommand.h" />
+    <ClInclude Include="IoT\IoTComponent.h" />
+    <ClInclude Include="IoT\IoTDevice.h" />
     <ClInclude Include="IoT\IoTManager.h" />
     <ClInclude Include="IoT\IoTPackage.h" />
+    <ClInclude Include="IoT\IoTRule.h" />
     <ClInclude Include="IoT\IoTUtility.h" />
+    <ClInclude Include="IoT\Ruler.h" />
     <ClInclude Include="jansson2.7\hashtable.h" />
     <ClInclude Include="jansson2.7\jansson.h" />
     <ClInclude Include="jansson2.7\jansson_config.h" />

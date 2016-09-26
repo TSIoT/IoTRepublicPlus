@@ -2,6 +2,7 @@
 #define SystemUtility_H_INCLUDED
 
 #include <iostream>
+#include <vector>
 using namespace std;
 
 #if defined(WIN32)
@@ -19,5 +20,9 @@ void ms_sleep(int ms);
 unsigned long long get_millis();
 void charcat(char *base_buf, char *target, int starIdx, int length);
 void printAllChar(char *data, int length);
+//void writeLog(string log);
+void writeLog(std::vector<char> *log);
+
+
 
 #endif

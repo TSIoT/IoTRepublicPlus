@@ -66,8 +66,12 @@ public:
 			JsonUtility::SetValueInFirstObject(root, "Value", this->Value);
 
 			sendedData << JsonUtility::ExportJsonContent(root);
+
+			//json_decref(root);
+			delete root;			
 		}
 	}
+	
 
 	IoTCommand(string content)
 	{
@@ -99,6 +103,44 @@ public:
 		}
 
 		sendedData << content;
+
+		delete root;
+	}
+
+	IoTCommand(std::vector<char> *contentVector)
+	{
+		string content(contentVector->begin(), contentVector->end());
+
+		json_t *root;
+		root = JsonUtility::LoadJsonData(content);
+		string jsonRootName = JsonUtility::GetFirstKeyName(root);
+
+		if (jsonRootName == this->rootName)
+		{
+			this->ID = JsonUtility::GetValueInFirstObject(root, "ID");
+			this->Value = JsonUtility::GetValueInFirstObject(root, "Value");
+			string type = JsonUtility::GetValueInFirstObject(root, "Type");
+			if (type == "Req")
+			{
+				this->CmdType = command_t_ReadRequest;
+			}
+			else if (type == "Res")
+			{
+				this->CmdType = command_t_ReadResponse;
+			}
+			else if (type == "Wri")
+			{
+				this->CmdType = command_t_Write;
+			}
+			else if (type == "Man")
+			{
+				this->CmdType = command_t_Management;
+			}
+		}
+
+		sendedData << content;
+
+		delete root;
 	}
 
 	~IoTCommand()

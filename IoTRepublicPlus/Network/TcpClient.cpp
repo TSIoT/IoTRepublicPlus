@@ -22,7 +22,17 @@ TcpClient::~TcpClient() //destructor
 NetworkError TcpClient::Connect()
 {
 	NetworkError errorCode = NetworkError_UnknownError;
+	/*
+#if defined(WIN32)
+	WSADATA wsa;
+	//printf("\nInitialising Winsock...");
+	if (WSAStartup(MAKEWORD(2, 2), &wsa) != 0)
+	{
+		cout << "Tcp server WSAStartup failed. Error Code :" << WSAGetLastError() << endl;
+	}
 
+#endif
+	*/
 	struct sockaddr_in address;
 	address.sin_addr.s_addr = inet_addr(this->targetIp.c_str());
 	address.sin_family = AF_INET;
@@ -30,7 +40,8 @@ NetworkError TcpClient::Connect()
 
 	if (connect(this->clientSocket, (struct sockaddr *)&address, sizeof(address)) < 0)
 	{
-		puts("Tcp client connect error");
+		//puts("Tcp client connect error");
+		cout << "Tcp client connect error!!!" << endl;
 		errorCode = NetworkError_ConnectError;
 	}
 	else
@@ -44,6 +55,7 @@ NetworkError TcpClient::Connect()
 
 void TcpClient::Disconnect()
 {
+	this->IsConnected = 0;
 	CloseTSSocket(this->clientSocket);
 }
 
@@ -76,7 +88,7 @@ void TcpClient::SendData(std::vector<char> *buffer)
 	}
 }
 
-void TcpClient::RecviveData(std::vector<char> *buffer)
+int TcpClient::RecviveData(std::vector<char> *buffer)
 {
 	char *recvBuffer = new char[this->maxReceiveBuffer];
 	int recvCount = 0;
@@ -84,7 +96,7 @@ void TcpClient::RecviveData(std::vector<char> *buffer)
 
 	if (recvCount > 0)
 	{
-		buffer->reserve(buffer->size()+recvCount);
+		//buffer->reserve(buffer->size()+recvCount);
 		for (int i = 0; i < recvCount; i++)
 		{
 			buffer->push_back(recvBuffer[i]);
@@ -93,6 +105,8 @@ void TcpClient::RecviveData(std::vector<char> *buffer)
 
 
 	delete[]recvBuffer;
+
+	return recvCount;
 }
 
 void TcpClient::StartListen()
@@ -120,7 +134,7 @@ void TcpClient::initClient()
 	if (WSAStartup(MAKEWORD(2, 2), &wsa) != 0)
 	{
 		printf("TcpClient init Failed. Error Code : %d", WSAGetLastError());
-		PAUSE;		
+		PAUSE;
 	}
 #endif
 

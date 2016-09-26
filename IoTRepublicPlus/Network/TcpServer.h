@@ -22,7 +22,7 @@ protected:
     void StopServer();
     TSSocket GetSocket(int socketIndex);
     void CutConnection(int socketIndex);
-    void SendDataToExistsConnection(int socketIndex,char* buffer, int length);
+    //void SendDataToExistsConnection(int socketIndex,char* buffer, int length);
     void SendDataToExistsConnection(int socketIndex,string buffer);
 	void SendDataToExistsConnection(int socketIndex,std::vector<char> *buffer);
 

@@ -13,7 +13,8 @@ public:
 		BrokerType_Unknown,
 		BrokerType_XBeeApiMode,
 		BrokerType_CloudBridge,
-		BrokerType_LoRa
+		BrokerType_LoRa,
+		BrokerType_CloudUploader
 	};
 
 	string Name;
@@ -27,9 +28,9 @@ public:
 	
 	virtual void Start() = 0;
 	virtual void Stop() = 0;
-	virtual void ScanAllDevice() = 0;
-	virtual void StartAutoRescan(int second) = 0;
-	virtual void StopAutoRescan() = 0;
+	//virtual void ScanAllDevice() = 0;
+	//virtual void StartAutoRescan(int second) = 0;
+	//virtual void StopAutoRescan() = 0;
 			
 protected:
 	IoTUtility *ioTUtility=NULL;
@@ -40,7 +41,7 @@ protected:
 	string askIoTIp();
 
 private:
-	void parseReceivedBuffer(string *selfIoTip, std::vector<char> *buffer);
+	void parseReceivedBuffer(string *selfIoTip, std::vector<char> *buffer);//for askIoTIp
 
 };
 

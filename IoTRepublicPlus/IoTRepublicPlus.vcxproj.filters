@@ -26,12 +26,6 @@
     <ClCompile Include="Utility\thread.cpp">
       <Filter>Utility</Filter>
     </ClCompile>
-    <ClCompile Include="IoT\IoTUtility.cpp">
-      <Filter>IoT</Filter>
-    </ClCompile>
-    <ClCompile Include="IoT\IoTPackage.cpp">
-      <Filter>IoT</Filter>
-    </ClCompile>
     <ClCompile Include="Broker\CloudBridge.cpp">
       <Filter>Broker</Filter>
     </ClCompile>
@@ -86,6 +80,27 @@
     <ClCompile Include="jansson2.7\value.c">
       <Filter>jansson2.7</Filter>
     </ClCompile>
+    <ClCompile Include="IoT\Ruler.cpp">
+      <Filter>IoT</Filter>
+    </ClCompile>
+    <ClCompile Include="Broker\FakeBroker.cpp">
+      <Filter>Broker</Filter>
+    </ClCompile>
+    <ClCompile Include="Broker\CloudUploader.cpp">
+      <Filter>Broker</Filter>
+    </ClCompile>
+    <ClCompile Include="IoT\IoTUtility.cpp">
+      <Filter>IoT\utility</Filter>
+    </ClCompile>
+    <ClCompile Include="IoT\IoTPackage.cpp">
+      <Filter>IoT\utility</Filter>
+    </ClCompile>
+    <ClCompile Include="IoT\IoTDevice.cpp">
+      <Filter>IoT\utility</Filter>
+    </ClCompile>
+    <ClCompile Include="IoT\IoTComponent.cpp">
+      <Filter>IoT\utility</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <Filter Include="Utility">
@@ -105,6 +120,9 @@
     </Filter>
     <Filter Include="jansson2.7">
       <UniqueIdentifier>{cf14f99e-28a6-4ee6-80c6-0a9b86b25b02}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="IoT\utility">
+      <UniqueIdentifier>{cbda74e6-935b-4cbe-909f-451840fbc65f}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
   <ItemGroup>
@@ -134,15 +152,6 @@
     </ClInclude>
     <ClInclude Include="Utility\thread.h">
       <Filter>Utility</Filter>
-    </ClInclude>
-    <ClInclude Include="IoT\IoTUtility.h">
-      <Filter>IoT</Filter>
-    </ClInclude>
-    <ClInclude Include="IoT\IoTPackage.h">
-      <Filter>IoT</Filter>
-    </ClInclude>
-    <ClInclude Include="IoT\IoTCommand.h">
-      <Filter>IoT</Filter>
     </ClInclude>
     <ClInclude Include="Broker\CloudBridge.h">
       <Filter>Broker</Filter>
@@ -185,6 +194,33 @@
     </ClInclude>
     <ClInclude Include="jansson2.7\utf.h">
       <Filter>jansson2.7</Filter>
+    </ClInclude>
+    <ClInclude Include="IoT\Ruler.h">
+      <Filter>IoT</Filter>
+    </ClInclude>
+    <ClInclude Include="Broker\FakeBroker.h">
+      <Filter>Broker</Filter>
+    </ClInclude>
+    <ClInclude Include="Broker\CloudUploader.h">
+      <Filter>Broker</Filter>
+    </ClInclude>
+    <ClInclude Include="IoT\IoTUtility.h">
+      <Filter>IoT\utility</Filter>
+    </ClInclude>
+    <ClInclude Include="IoT\IoTRule.h">
+      <Filter>IoT\utility</Filter>
+    </ClInclude>
+    <ClInclude Include="IoT\IoTPackage.h">
+      <Filter>IoT\utility</Filter>
+    </ClInclude>
+    <ClInclude Include="IoT\IoTDevice.h">
+      <Filter>IoT\utility</Filter>
+    </ClInclude>
+    <ClInclude Include="IoT\IoTCommand.h">
+      <Filter>IoT\utility</Filter>
+    </ClInclude>
+    <ClInclude Include="IoT\IoTComponent.h">
+      <Filter>IoT\utility</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>

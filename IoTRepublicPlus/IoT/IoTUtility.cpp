@@ -141,7 +141,12 @@ bool IoTUtility::isValidPackage(std::vector<char> *buffer, GetPackageError *erro
 		{
 			sum += buffer->at(i);
 		}
-
+		
+		while ((sum >> 16) > 0)
+		{
+			sum = (sum & 0xFFFF) + (sum >> 16);
+		}
+		
 		sendedSum = 0;
 		sendedSum |= (unsigned char)buffer->at(totalLength);
 		sendedSum = sendedSum << 8;
@@ -153,7 +158,8 @@ bool IoTUtility::isValidPackage(std::vector<char> *buffer, GetPackageError *erro
 
 		}
 		else
-		{
+		{			
+			//writeLog(buffer);
 			cout << "Check sum error!" << endl;
 			//if check sum error, need to clear the buffer
 			*error = GetPackageError_ChecksumError;
@@ -257,5 +263,3 @@ string IoTUtility::popHeader(std::vector<char> *buffer,int startIndex)
 
 	return tempBuffer.str();
 }
-
-

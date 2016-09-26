@@ -82,7 +82,7 @@ json_t* JsonUtility::LoadJsonData(string text)
 	if (!root)
 	{
 		fprintf(stderr, "error: on line %d: %s\n", error.line, error.text);
-	}
+	}	
 
 	return root;
 }
@@ -108,7 +108,6 @@ json_t* JsonUtility::LoadJsonData(std::vector<char> *text)
 
 	return root;
 }
-
 
 string JsonUtility::ExportJsonContent(json_t *root)
 {
@@ -201,7 +200,6 @@ bool JsonUtility::IsLeaglJsonFile(std::vector<char> *text)
 	return result;
 }
 
-
 string JsonUtility::GetFirstKeyName(json_t *root)
 {
     void *iter = json_object_iter(root);
@@ -264,4 +262,34 @@ string JsonUtility::GetValueInRootObject(json_t *root, string keyName)
 	const char *rootLevel = json_string_value(value);
 
 	return string(rootLevel);
+}
+
+string JsonUtility::GetArrayValueInFirstObject(json_t *root, string arrayName, int arrayIndex, string keyName)
+{
+	const char *result = NULL;
+	string rootName = GetFirstKeyName(root);
+	json_t *firstObj = json_object_get(root, rootName.c_str());
+	json_t *arr = json_object_get(firstObj, arrayName.c_str());
+	if (json_is_array(arr))
+	{
+		json_t *element = json_array_get(arr, arrayIndex);
+		json_t *value = json_object_get(element, keyName.c_str());
+		result = json_string_value(value);				
+	}
+
+	return string(result);	
+}
+
+int JsonUtility::GetArrayLengthInFirstObject(json_t *root, string arrayName)
+{
+	int arrayLength = 0;
+	string rootName = GetFirstKeyName(root);
+	json_t *firstObj = json_object_get(root, rootName.c_str());
+	json_t *arr = json_object_get(firstObj, arrayName.c_str());
+	if (json_is_array(arr))
+	{
+		arrayLength = json_array_size(arr);
+	}	
+	
+	return arrayLength;
 }

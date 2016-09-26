@@ -23,6 +23,7 @@ void UdpServer::StopServer()
 {
 	Thread_stop(&this->serverThread);
 	Thread_kill(&this->serverThread);
+	cout << "UDP Server stoped!" << endl;
 	//puts("UDP server stoped");
 }
 
@@ -46,10 +47,11 @@ void UdpServer::server_main_loop_entry(UdpServer *serverObj)
 
 int UdpServer::server_loop()
 {
+	/*
 	cout << "UDP Server started" << endl;
 	cout << "Max receive buffer:" << this->maxReceiveBuffer << endl;
 	cout << "Port:" << this->serverPort << endl;
-
+	*/
 	std::vector<char> buf(this->maxReceiveBuffer);
 
 #if defined(WIN32)
@@ -86,7 +88,7 @@ int UdpServer::server_loop()
 	int status = bind(this->listener, (struct sockaddr *)&sockaddr, sizeof(sockaddr));
 	if (status == -1)
 	{
-		cout << "Broadcast server Error: listenForPackets - bind() failed." << endl;
+		cout << "UDP server Error: listenForPackets - bind() failed." << endl;
 		CloseTSSocket(this->listener);	
 		return -1;
 	}
@@ -99,7 +101,7 @@ int UdpServer::server_loop()
 	socklen_t receiveSockaddrLen = sizeof(receiveSockaddr);
 #endif
 
-	cout << "Broad cast server started" << endl;;
+	cout << "UDP server started" << endl;;
 	int n = 0;
 	while (1)
 	{

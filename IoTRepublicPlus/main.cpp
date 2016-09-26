@@ -11,6 +11,8 @@
 #include "Broker/IBroker.h"
 #include "Broker/XBeeBroker_ApiMode.h"
 #include "Broker/BrokerController.h"
+#include "Broker/FakeBroker.h"
+#include "Broker/CloudUploader.h"
 
 
 using namespace std;
@@ -20,27 +22,13 @@ using namespace std;
 
 #define Broker
 #define XBeeBroker_api
+//#define FakeBroker_
 //#define CloudBridge_
+//#define CloudUploader_
 
 
 int main()
 {	
-	/*
-	JsonUtility json;
-	//json.jsonTest();
-	//json.ArrayTest();
-	//json.CommandTest();
-	//json.DumpTest();
-	PAUSE;
-	*/
-	
-	/*
-	TcpClient client("104.199.183.220", 6210, 2000);
-	//TcpClient client("192.168.156.199", 6210, 2000);
-	client.Connect();
-	PAUSE;
-	client.Disconnect();
-	*/
 
 	int managerPort = 6210;
 	int brocastPort = 6215;
@@ -56,6 +44,8 @@ int main()
 #ifdef IoTManager_
 	IoTManager manager(managerPort, maxReceiveBuffer, maxClientOfManager);
 	manager.StartManager();
+	manager.StartRuler(1000);
+
 	ms_sleep(100);
 #endif
 
@@ -63,23 +53,49 @@ int main()
 	//Broker
 	string managerIp("127.0.0.1");	
 	BrokerController brokerController;
+	string cloudLoginId = "DDR";
+	string cloudLoginPw = "AAAAA";
+	
 	
 	#ifdef XBeeBroker_api
 		//XBee broker
-		int comNumber = 28;
+		int comNumber = 38;
 		int baudRate = 9600;
 		IBroker *xbeeBroker = new XBeeBroker_ApiMode("XBeeApi", IBroker::BrokerType_XBeeApiMode, 
 			managerIp, managerPort, 
-			comNumber, baudRate);			
+			comNumber, baudRate);
 		brokerController.AddBroker(xbeeBroker);
 	#endif
+
+	#ifdef FakeBroker_	
+		IBroker *fakeBroker = new FakeBroker("FakeBroker", IBroker::BrokerType_XBeeApiMode,
+			managerIp, managerPort);
+		brokerController.AddBroker(fakeBroker);
+	#endif
 	
-	#ifdef CloudBridge
+	#ifdef CloudBridge_
 		int cloudServerPort = 6210;
 		string cloudServerIp = "104.199.183.220";
-		CloudBridge cloudBroker(cloudServerIp, cloudServerPort, maxReceiveBuffer);
-		NetworkError error = cloudBroker.Login("DDR", "AAA");
-		cout << "Cloud Broker login result:" << error << endl;
+		//string cloudServerIp = "192.168.156.218";
+		//string cloudServerIp = "192.168.0.134";
+		CloudBridge cloudBroker(cloudServerIp, cloudServerPort, maxReceiveBuffer, 
+			"CloudBridge", IBroker::BrokerType_CloudBridge);
+
+		NetworkError error = cloudBroker.Login(cloudLoginId, cloudLoginPw);
+		if (error == NetworkError_NoError)
+		{
+			brokerController.AddBroker((IBroker*)&cloudBroker);
+		}
+		
+		//cout << "Cloud Broker login result:" << error << endl;
+	#endif
+
+	#ifdef CloudUploader_	
+		string webServerUrl = "http://104.199.183.220/AddDailyData.php";
+
+		IBroker *uploader = new CloudUploader(webServerUrl, cloudLoginId, cloudLoginPw,"CloudUploader", IBroker::BrokerType_CloudUploader,managerIp,managerPort);
+			
+		brokerController.AddBroker(uploader);
 	#endif
 
 		
@@ -87,24 +103,20 @@ int main()
 
 #endif
 
+/*
 #ifdef CloudBridge_
 	CloudBridge cloudBroker("104.199.183.220", managerPort, maxReceiveBuffer);
 	cloudBroker.Login("DDR", "AAA");
 #endif
-
-
+*/
 	PAUSE;
-
-
-#ifdef CloudBridge_
-	cloudBroker.Logout();
-#endif
-
+	
 #ifdef Broker
 	brokerController.StopAllBroker();
 #endif
 
 #ifdef IoTManager_
+	manager.StopRuler();
 	manager.StopManager();
 #endif
 
@@ -114,3 +126,4 @@ int main()
 	
 	return 0;
 }
+

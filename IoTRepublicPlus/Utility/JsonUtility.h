@@ -25,7 +25,8 @@ public:
 	static string GetValueInFirstObject(json_t *root,string keyName);
 	static void SetValueInFirstObject(json_t *root,string keyName, string value);
 	static string GetValueInRootObject(json_t *root, string keyName);
-
+	static string GetArrayValueInFirstObject(json_t *root, string arrayName, int arrayIndex, string keyName);
+	static int GetArrayLengthInFirstObject(json_t *root, string arrayName);
 
 	/*
 	void DumpTest()

@@ -1,4 +1,5 @@
 #include "TcpServer.h"
+//#include <string>
 
 
 //Public methods
@@ -40,23 +41,24 @@ TSSocket TcpServer::GetSocket(int socketIndex)
 
 void TcpServer::CutConnection(int socketIndex)
 {
+	CloseTSSocket(this->clientSockets->at(socketIndex));
     FD_CLR(this->clientSockets->at(socketIndex), &this->master);
-    CloseTSSocket(this->clientSockets->at(socketIndex));
+    
     this->clientSockets->at(socketIndex) = 0;
 
     this->Event_ConnectionDenied(socketIndex);
 
 }
 
+/*
 void TcpServer::SendDataToExistsConnection(int socketIndex,char* buffer, int length)
 {
     if(this->clientSockets->at(socketIndex)>0)
     {
         send(this->clientSockets->at(socketIndex),buffer,length,0);
     }
-
 }
-
+*/
 void TcpServer::SendDataToExistsConnection(int socketIndex,string buffer)
 {
     if(this->clientSockets->at(socketIndex)>0)
@@ -75,7 +77,7 @@ void TcpServer::SendDataToExistsConnection(int socketIndex,string buffer)
 void TcpServer::SendDataToExistsConnection(int socketIndex,std::vector<char> *buffer)
 {
     if(this->clientSockets->at(socketIndex)>0)
-    {
+    {		
 		send(this->clientSockets->at(socketIndex), &buffer->at(0), buffer->size(), 0);
     }
 }
@@ -111,17 +113,18 @@ void TcpServer::server_main_loop_entry(TcpServer *serverObj)
 
 int TcpServer::server_loop()
 {
+	/*
     cout << "TCP Server starting" << endl;
     cout << "Port:"<< this->serverPort << endl;
     cout << "Max Receive buffer:"<< this->maxReceiveBuffer << endl;
     cout << "Max Client number:"<< this->maxClient << endl;
-
+	*/
 #if defined(WIN32)
 	WSADATA wsa;
 	//printf("\nInitialising Winsock...");
 	if (WSAStartup(MAKEWORD(2, 2), &wsa) != 0)
 	{
-		printf("Main server WSAStartup failed. Error Code : %d", WSAGetLastError());
+		printf("Tcp server WSAStartup failed. Error Code : %d", WSAGetLastError());
 		PAUSE;
 		return -1;
 	}
@@ -147,6 +150,7 @@ int TcpServer::server_loop()
 		return NetworkError_SocketError;
     }
 
+	/*
 	#if defined(WIN32)
 	if ((setsockopt(this->listener, SOL_SOCKET, SO_REUSEADDR,(char*) &on, sizeof(int)))<0)
 	{
@@ -169,6 +173,7 @@ int TcpServer::server_loop()
         cout << "TCP Server Socket created" << endl;
     }
 	#endif
+	*/
 
 	address.sin_family = AF_INET;
 	address.sin_addr.s_addr = INADDR_ANY;
@@ -177,7 +182,7 @@ int TcpServer::server_loop()
 	//Bind
 	if (bind(this->listener, (struct sockaddr *)&address, sizeof(address)) == -1)
 	{
-	    cout << "TCP server Bind failed"<<endl;
+	    cout << "TCP server Bind failed!!"<<endl;
         return NetworkError_SocketError;
 	}
 	else
@@ -213,7 +218,7 @@ int TcpServer::server_loop()
 			}
 
 			//inform user of socket number - used in send and receive commands
-			cout << "Main server has new connection , socket fd is" << new_socket
+			cout << "Tcp server has new connection , socket fd is" << new_socket
 			<<" Ip:" << inet_ntoa(address.sin_addr)
 			<<" Port:" <<ntohs(address.sin_port)<<endl;
 
@@ -225,7 +230,7 @@ int TcpServer::server_loop()
 					this->clientSockets->at(i) = new_socket;
 					FD_SET(new_socket, &this->master);
 					this->Event_NewConnection(i);
-					cout << "Main server adding a new item to list of sockets at index:"<< i <<endl;
+					//cout << "Main server adding a new item to list of sockets at index:"<< i <<endl;
 					fdmax=new_socket;
 					break;
 				}
@@ -243,12 +248,14 @@ int TcpServer::server_loop()
 				if (valread <= 0)
 				{
 					//Somebody disconnected , get his details and print
-					cout << "Main server got host disconnected ip:"<< inet_ntoa(address.sin_addr)
+					cout << "Tcp server got host disconnected ip:"<< inet_ntoa(address.sin_addr)
 					<< " Port:" << ntohs(address.sin_port) <<endl;
 					this->CutConnection(i);
 				}
 				else if (valread>0)
 				{
+					//string ackMsg = std::to_string(i);
+					//TcpServer::SendDataToExistsConnection(i, ackMsg);
 					this->Event_ReceivedData(i, &buffer, valread);
 				}
 			}

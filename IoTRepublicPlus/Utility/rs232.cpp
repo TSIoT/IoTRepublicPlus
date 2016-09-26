@@ -419,7 +419,7 @@ void RS232_disableRTS(int comport_number)
 HANDLE Cport[30];
 
 
-char comports[33][10]={"\\\\.\\COM0",
+char comports[41][10]={"\\\\.\\COM0",
 					   "\\\\.\\COM1",  "\\\\.\\COM2",  "\\\\.\\COM3",  "\\\\.\\COM4",
                        "\\\\.\\COM5",  "\\\\.\\COM6",  "\\\\.\\COM7",  "\\\\.\\COM8",
                        "\\\\.\\COM9",  "\\\\.\\COM10", "\\\\.\\COM11", "\\\\.\\COM12",
@@ -427,7 +427,9 @@ char comports[33][10]={"\\\\.\\COM0",
 					   "\\\\.\\COM17", "\\\\.\\COM18", "\\\\.\\COM19", "\\\\.\\COM20",
 					   "\\\\.\\COM21", "\\\\.\\COM22", "\\\\.\\COM23", "\\\\.\\COM24",
 	                   "\\\\.\\COM25", "\\\\.\\COM26", "\\\\.\\COM27", "\\\\.\\COM28",
-						"\\\\.\\COM29", "\\\\.\\COM30", "\\\\.\\COM31", "\\\\.\\COM32" };
+						"\\\\.\\COM29", "\\\\.\\COM30", "\\\\.\\COM31", "\\\\.\\COM32",
+						"\\\\.\\COM33", "\\\\.\\COM34", "\\\\.\\COM35", "\\\\.\\COM36",
+						"\\\\.\\COM37", "\\\\.\\COM38", "\\\\.\\COM39", "\\\\.\\COM40" };
 					   
 /*
 char comports[16][10] = { "\\\\.\\COM1", "\\\\.\\COM2", "\\\\.\\COM3", "\\\\.\\COM4",
@@ -440,7 +442,7 @@ char mode_str[128];
 
 int RS232_OpenComport(int comport_number, int baudrate, const char *mode)
 {
-  if((comport_number>30)||(comport_number<0))
+  if((comport_number>40)||(comport_number<0))
   {
     printf("illegal comport number\n");
     return(1);
