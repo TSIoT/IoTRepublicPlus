@@ -21,15 +21,14 @@ using namespace std;
 #define IoTManager_
 
 #define Broker
-#define XBeeBroker_api
+//#define XBeeBroker_api
 //#define FakeBroker_
-//#define CloudBridge_
+#define CloudBridge_
 //#define CloudUploader_
 
 
 int main()
 {	
-
 	int managerPort = 6210;
 	int brocastPort = 6215;
 	int maxReceiveBuffer = 2000;
@@ -59,7 +58,7 @@ int main()
 	
 	#ifdef XBeeBroker_api
 		//XBee broker
-		int comNumber = 38;
+		int comNumber = 13;
 		int baudRate = 9600;
 		IBroker *xbeeBroker = new XBeeBroker_ApiMode("XBeeApi", IBroker::BrokerType_XBeeApiMode, 
 			managerIp, managerPort, 
@@ -75,8 +74,8 @@ int main()
 	
 	#ifdef CloudBridge_
 		int cloudServerPort = 6210;
-		string cloudServerIp = "104.199.183.220";
-		//string cloudServerIp = "192.168.156.218";
+		//string cloudServerIp = "104.199.183.220";
+		string cloudServerIp = "192.168.156.233";
 		//string cloudServerIp = "192.168.0.134";
 		CloudBridge cloudBroker(cloudServerIp, cloudServerPort, maxReceiveBuffer, 
 			"CloudBridge", IBroker::BrokerType_CloudBridge);

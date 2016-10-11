@@ -130,7 +130,7 @@ int TcpServer::server_loop()
 	}
 
 #endif
-	int activity = 0, i = 0, valread = 0, on = 1, fdmax=0;
+	int activity = 0, i = 0, valread = 0, fdmax=0;
 	
 	std::vector<char> buffer;
 	buffer.resize(this->maxReceiveBuffer);

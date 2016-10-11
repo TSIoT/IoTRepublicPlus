@@ -496,9 +496,9 @@ void XBeeBroker_ApiMode::sendData(XBeeAddress64 xbee_mac_addr, std::vector<char>
 	std::vector<unsigned char> sendBuff;
 
 	sendBuff.reserve(send_buf_len);
-	sendBuff.push_back(0x02);
+	sendBuff.push_back(this->startCode);
 	sendBuff.insert(sendBuff.end(), data->begin(), data->end());
-	sendBuff.push_back(0x03);
+	sendBuff.push_back(this->endCode);
 
 	ZBTxRequest zbTx;
 

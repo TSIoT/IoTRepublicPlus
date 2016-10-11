@@ -77,12 +77,11 @@ void writeLog(string log)
 
 void writeLog(std::vector<char> *log)
 {
+#if defined(WIN32)
 	TSFile fileHandle;
-
 	char *path = "C:\\Users\\loki.chuang\\Documents\\Visual Studio 2015\\Projects\\IoTRepublicPlus\\Debug\\log.txt";
 	char *writeBuf = new char[log->size()];
-	int length = log->size();
-
+	int length = log->size();
 	for (int i = 0; i < length; i++)
 	{
 		if (log->at(i) == 0)
@@ -93,12 +92,12 @@ void writeLog(std::vector<char> *log)
 		{
 			writeBuf[i] = log->at(i);
 		}
-	}
+	}
 
-	//File_open(&fileHandle, path, O_RDWR);
-	File_open(&fileHandle, path, O_APPEND|O_RDWR);
+	File_open(&fileHandle, path, O_APPEND | O_RDWR);
 	File_write(&fileHandle, writeBuf, length);
 	File_write(&fileHandle, "\n", 1);
-	File_close(&fileHandle);	
+	File_close(&fileHandle);
+#endif // defined
 }
 

@@ -176,14 +176,15 @@ void CloudBridge::managerLoop()
 	
 	while (1)
 	{		
+		
 		this->socketToManager->RecviveData(&recvBuffer);
 		if (recvBuffer.size()>0)
 		{
-			//Mutex_lock(&CloudBridge::mutexLock);
+			Mutex_lock(&CloudBridge::mutexLock);
 			//cout << "Receive form manager, forwarding to Cloud" << endl;			
 			this->socketToCloud->SendData(&recvBuffer);
 			recvBuffer.clear();
-			//Mutex_unlock(&CloudBridge::mutexLock);
+			Mutex_unlock(&CloudBridge::mutexLock);
 		}
 		
 		//cout << "free" << endl;

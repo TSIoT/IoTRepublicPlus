@@ -32,7 +32,7 @@ private:
 
 	static void faker_main_loop_entry(FakeBroker *Obj);
 	void loop();
-	void FakeBroker::registerAllFakeDevice();
+	void registerAllFakeDevice();
 };
 
 #endif
