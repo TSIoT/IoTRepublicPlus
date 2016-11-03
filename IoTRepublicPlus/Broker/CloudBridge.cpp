@@ -7,8 +7,16 @@
 
 TSMutex CloudBridge::mutexLock;
 
-CloudBridge::CloudBridge(string targetIp, int port, int maxRecvSize,string name, BrokerType type) :IBroker(name, type, this->managerIoTIp, this->managerPort)
+//CloudBridge::CloudBridge(string targetIp, int port, int maxRecvSize,string name, BrokerType type) :IBroker(name, type, this->managerIp, this->managerPort)
+CloudBridge::CloudBridge(string name, BrokerType type, 
+	string managerIp, int managerPort, 
+	string targetIp, int port, int maxRecvSize) :IBroker(name, type, managerIp, managerPort)
 {
+	//IBroker::ManagerIp = "127.0.0.1";
+	//IBroker::ManagerServerPort = 6210;
+
+	
+
 	this->maxRecvSize = maxRecvSize;
 	this->socketToCloud = new TcpClient(targetIp, port, maxRecvSize);
 	
@@ -137,21 +145,26 @@ void CloudBridge::startListener()
 {
 	Thread_create(&this->cloudThread, (TSThreadProc)CloudBridge::cloudSocketLoopEntry, this);
 	Thread_run(&this->cloudThread);
-
+	
 	Thread_create(&this->managerThread, (TSThreadProc)CloudBridge::managerSocketLoopEntry, this);
 	Thread_run(&this->managerThread);
+	
+	Thread_create(&this->keepAliveThread, (TSThreadProc)CloudBridge::keepAliveLoopEntry, this);
+	Thread_run(&this->keepAliveThread);	
 }
 
 void CloudBridge::stopListener()
 {
 	cout << "Cloud bridge Stop all listener" << endl;
 	
+	Thread_stop(&this->keepAliveThread);
+	Thread_kill(&this->keepAliveThread);
+
 	Thread_stop(&this->cloudThread);
 	Thread_kill(&this->cloudThread);
 
 	Thread_stop(&this->managerThread);
-	Thread_kill(&this->managerThread);
-	
+	Thread_kill(&this->managerThread);			
 }
 
 void CloudBridge::managerSocketLoopEntry(CloudBridge *clientObj)
@@ -164,19 +177,24 @@ void CloudBridge::cloudSocketLoopEntry(CloudBridge *clientObj)
 	clientObj->cloudLoop();
 }
 
+void CloudBridge::keepAliveLoopEntry(CloudBridge *clientObj)
+{
+	clientObj->keepAliveLoop();
+}
+
 void CloudBridge::managerLoop()
 {
 	
-	cout << "Start manager listener" << endl;	
-	this->socketToManager = new TcpClient(this->managerIp,this->managerPort , this->maxRecvSize);
+	cout << "Start manager listener:" << IBroker::ManagerIp << endl;
+
+	this->socketToManager = new TcpClient(IBroker::ManagerIp, IBroker::ManagerServerPort, this->maxRecvSize);
 	this->socketToManager->Connect();
 
 	std::vector<char> recvBuffer;
 	recvBuffer.reserve(this->maxRecvSize);
 	
 	while (1)
-	{		
-		
+	{				
 		this->socketToManager->RecviveData(&recvBuffer);
 		if (recvBuffer.size()>0)
 		{
@@ -238,6 +256,22 @@ void CloudBridge::cloudLoop()
 	}
 }
 
+void CloudBridge::keepAliveLoop()
+{
+	std::vector<char> synData;
+	synData.push_back(0x05); //ENQ
+
+
+	while (1)
+	{
+		ms_sleep(this->keepAliveFrequency);
+		Mutex_lock(&CloudBridge::mutexLock);
+		cout << "Send keep alive msg" << endl;
+		this->socketToCloud->SendData(&synData);
+		Mutex_unlock(&CloudBridge::mutexLock);
+		
+	}
+}
 
 bool CloudBridge::reconnectToManager(std::vector<char> *dataVector)
 {

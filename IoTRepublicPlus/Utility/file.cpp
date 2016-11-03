@@ -1,3 +1,5 @@
+#include <iostream>
+
 #ifdef _WIN32
 #include <io.h>
 #else
@@ -16,7 +18,7 @@
 int File_open(TSFile *f, char *name, unsigned int attrib)
 {
 #ifdef _WIN32
-	return ((*f = _open(name, attrib)) != (-1));
+	return ((*f = _open(name, attrib)) != (-1));	
 #else
 	return ((*f = open(name, attrib)) != (-1));
 #endif

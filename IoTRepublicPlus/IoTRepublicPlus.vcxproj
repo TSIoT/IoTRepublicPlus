@@ -78,6 +78,7 @@
     <ClInclude Include="jansson2.7\lookup3.h" />
     <ClInclude Include="jansson2.7\strbuffer.h" />
     <ClInclude Include="jansson2.7\utf.h" />
+    <ClInclude Include="main.h" />
     <ClInclude Include="Network\TcpClient.h" />
     <ClInclude Include="Network\TcpServer.h" />
     <ClInclude Include="Network\UdpServer.h" />

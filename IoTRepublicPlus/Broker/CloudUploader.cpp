@@ -4,7 +4,7 @@
 #pragma comment(lib,"curl/libcurl.lib")
 #include "../curl/curl.h"
 
-#else defined(__linux__)
+#elif defined(__linux__)
 #include <curl/curl.h>
 
 #endif
@@ -36,6 +36,10 @@ CloudUploader::CloudUploader(string url, string loginId, string loginPw,
 
 	subObj = new SubscriptObj("arduino.grove.pro.ths01", "tempe", 60 * 60 * 1000);
 	this->subscriptObjs.push_back(*subObj);	
+
+	subObj = new SubscriptObj("arduino.grove.dl01", "lux", 60 * 1000);
+	this->subscriptObjs.push_back(*subObj);
+	
 }
 
 CloudUploader::~CloudUploader()

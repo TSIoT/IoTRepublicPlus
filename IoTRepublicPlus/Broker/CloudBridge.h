@@ -13,11 +13,9 @@ using namespace std;
 class CloudBridge:public IBroker
 {
 public:
-	CloudBridge(string targetIp, int port, int maxRecvSize, string name, BrokerType type);
+	CloudBridge(string name, BrokerType type, string managerIp, int managerPort,string targetIp, int port, int maxRecvSize);
 	~CloudBridge();
-
 	
-
 	bool IsLoggeed;
 
 	NetworkError Login(string id, string password);
@@ -31,12 +29,14 @@ private:
 	TcpClient *socketToManager;
 	TSThread cloudThread;
 	TSThread managerThread;
+	TSThread keepAliveThread;
 	static TSMutex mutexLock;
 
 
-	string managerIp = "127.0.0.1";
-	int managerPort = 6210;
+	//string managerIp = "127.0.0.1";
+	//int managerPort = 6210;
 	int maxRecvSize;
+	int keepAliveFrequency = 5 * 60 * 1000; //5 minite send a keep empty msg
 
 	enum LoginError
 	{
@@ -55,9 +55,11 @@ private:
 	void stopListener();
 	static void managerSocketLoopEntry(CloudBridge *clientObj);
 	static void cloudSocketLoopEntry(CloudBridge *clientObj);
+	static void keepAliveLoopEntry(CloudBridge *clientObj);
 
 	void managerLoop();
 	void cloudLoop();
+	void keepAliveLoop();
 
 	bool reconnectToManager(std::vector<char> *dataVector);
 };

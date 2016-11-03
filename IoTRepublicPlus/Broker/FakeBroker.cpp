@@ -93,12 +93,14 @@ void FakeBroker::loop()
 					
 					if (recvCmd->CmdType == IoTCommand::command_t_ReadRequest)
 					{
-						int value_int = (rand() % 100);
-						
+						int value_int = (rand() % 100);		
+						cout << "ID:" << recvCmd->ID << endl;
+						cout << "Value:" << value_int << endl;
 						responseCmd = new IoTCommand(IoTCommand::command_t_ReadResponse, recvCmd->ID, std::to_string(value_int));
 					}
 					else
 					{
+						cout << "Recv CMD:" << recvCmd->ID << endl;;
 						responseCmd = new IoTCommand(IoTCommand::command_t_ReadResponse, recvCmd->ID, "OK");
 					}
 										
@@ -128,13 +130,14 @@ void FakeBroker::registerAllFakeDevice()
 	iotIp = this->askIoTIp();
 	deviceDesc = "{\"IOTDEV\":{\"DeviceName\":\"Moisture sensor\",\"FunctionGroup\":\"Sensor\",\"DeviceID\":\"arduino.grove.mois01\",\"Component\":[{\"ID\":\"mois\",\"Group\":\"1\",\"Name\":\"Moisture Value\",\"Type\":\"Content\",\"ReadFrequency\":\"2000\"}]}}";
 	package = new IoTPackage(IoTPackage::ProtocolVersion, iotIp, IBroker::managerIoTIp, deviceDesc);
-	this->client->SendData(&package->DataVectorForSending);
-	
+	this->client->SendData(&package->DataVectorForSending);	
+
 	iotIp = this->askIoTIp();
 	deviceDesc = "{\"IOTDEV\":{\"DeviceName\":\"Digital light sensor\",\"FunctionGroup\":\"Sensor\",\"DeviceID\":\"arduino.grove.dl01\",\"Component\":[{\"ID\":\"lux\",\"Group\":\"1\",\"Name\":\"Brightness\",\"Type\":\"Content\",\"ReadFrequency\":\"10000\"}]}}";
 	package = new IoTPackage(IoTPackage::ProtocolVersion, iotIp, IBroker::managerIoTIp, deviceDesc);
 	this->client->SendData(&package->DataVectorForSending);
 
+	
 	iotIp = this->askIoTIp();
 	deviceDesc = "{\"IOTDEV\":{\"DeviceName\":\"Temperature and humidity sensor\",\"FunctionGroup\":\"Sensor\",\"DeviceID\":\"arduino.grove.pro.ths01\",\"Component\":[{\"ID\":\"tempe\",\"Group\":\"1\",\"Name\":\"Temperature\",\"Type\":\"Content\",\"ReadFrequency\":\"10000\"},{\"ID\":\"humi\",\"Group\":\"2\",\"Name\":\"Humidity\",\"Type\":\"Content\",\"ReadFrequency\":\"10000\"}]}}";
 	package = new IoTPackage(IoTPackage::ProtocolVersion, iotIp, IBroker::managerIoTIp, deviceDesc);

@@ -25,6 +25,8 @@ IoTManager::IoTManager(int port, int maxReceiveBuffer, int maxClient) :TcpServer
 	}
 }
 
+
+
 IoTManager::~IoTManager()
 {
 	/*

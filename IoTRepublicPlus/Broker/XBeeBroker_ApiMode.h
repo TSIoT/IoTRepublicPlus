@@ -89,6 +89,7 @@ private:
 	int findStartCodeIndex(std::vector<char> *buffer);
 	int findEndCodeIndex(std::vector<char> *buffer);
 	unsigned int getCheckSum(std::vector<char> *buffer);
+	void clearComportBuffer();
 
 	//XBee network maintain
 	void registerDevice(XBeeAddress64 addr);

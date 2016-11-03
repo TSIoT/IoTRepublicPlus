@@ -1,7 +1,8 @@
 
 #include "XBeeBroker_ApiMode.h"
-#include "../Utility/SystemUtility.h"
 #include "../IoT/IoTCommand.h"
+#include "../Utility/SystemUtility.h"
+#include "../Utility/rs232.h"
 
 //public method
 XBeeBroker_ApiMode::XBeeBroker_ApiMode(string name, BrokerType type,string ip,int port,int comNumber,int baudrate) :IBroker(name, type,ip,port)
@@ -72,7 +73,7 @@ void XBeeBroker_ApiMode::ScanAllDevice()
 	std::vector<XBeeAddress64> xbeeAddresses;
 
 	recvBuffer.reserve(50);
-
+	this->clearComportBuffer();
 	//send scan command
 	this->sendAtCommand(cmdDiscover, "");
 	while (1)
@@ -272,6 +273,7 @@ void XBeeBroker_ApiMode::handleForwardingPackage(IoTPackage *package)
 		this->clientToManager->SendData(&responsePackage.DataVectorForSending);		
 	}
 
+	this->clearComportBuffer();
 
 	delete cmdFromManager;
 
@@ -604,6 +606,22 @@ unsigned int XBeeBroker_ApiMode::getCheckSum(std::vector<char> *buffer)
 	return sum;
 }
 
+void XBeeBroker_ApiMode::clearComportBuffer()
+{	
+	const int bufSize = 200;
+	unsigned long long startTime = get_millis();
+	unsigned char readBuff[bufSize];
+	int n = 0;
+	while (get_millis() - startTime < 100)
+	{
+		n=RS232_PollComport(this->RS232PortNumaber, readBuff, bufSize);
+		if (n > 0)
+		{
+			startTime = get_millis();
+		}
+	}
+	//this->RS232PortNumaber
+}
 
 //XBee network maintain
 void XBeeBroker_ApiMode::registerDevice(XBeeAddress64 addr)

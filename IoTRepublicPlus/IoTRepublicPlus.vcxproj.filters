@@ -222,5 +222,6 @@
     <ClInclude Include="IoT\IoTComponent.h">
       <Filter>IoT\utility</Filter>
     </ClInclude>
+    <ClInclude Include="main.h" />
   </ItemGroup>
 </Project>
