@@ -24,8 +24,8 @@ void printAllChar(char *data, int length);
 void writeLog(std::vector<char> *log);
 
 bool ReadTextFileToVector(string path,std::vector<char> *vector);
-int Base64encode(char *encoded, const char *string, int len);
-int Base64decode(char *bufplain, const char *bufcoded);
+int Base64encode(char *encoded, char *source, int len);
+int Base64decode(char *bufplain, char *bufcoded);
 
 
 #endif

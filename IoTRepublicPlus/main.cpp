@@ -18,18 +18,20 @@
 #include "Broker/BrokerController.h"
 #include "Broker/FakeBroker.h"
 #include "Broker/CloudUploader.h"
+#include "Broker/LoRaBroker.h"
 
 #include <stdlib.h>
 #include <stdint.h>
 
-#define LoadConfigFile_
+//#define LoadConfigFile_
 
 
 //if allow LoadConfigFile_ config file, all define below will be useless
 #define BrocastServer_
 #define IoTManager_
 
-//#define Broker
+#define Broker
+#define LoRaBroker_
 //#define XBeeBroker_api
 //#define FakeBroker_
 //#define CloudBridge_
@@ -279,6 +281,7 @@ int main()
 	string cloudLoginPw = "AAAAA";
 
 
+
 #ifdef XBeeBroker_api
 	//XBee broker
 	int comNumber = 20;
@@ -287,6 +290,16 @@ int main()
 		managerIp, managerPort,
 		comNumber, baudRate);
 	brokerController.AddBroker(xbeeBroker);
+#endif
+
+#ifdef LoRaBroker_
+	//LoRa broker
+	int comNumber = 5;
+	int baudRate = 9600;
+	IBroker *loraBroker = new LoRaBroker("LoRaBroker", IBroker::BrokerType_LoRa,
+		managerIp, managerPort,
+		comNumber, baudRate);
+	brokerController.AddBroker(loraBroker);
 #endif
 
 #ifdef FakeBroker_	

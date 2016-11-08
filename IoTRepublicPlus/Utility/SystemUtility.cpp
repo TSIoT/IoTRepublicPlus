@@ -160,7 +160,7 @@ bool ReadTextFileToVector(string path, std::vector<char> *vector)
 	return succeed;
 }
 
-int Base64encode(char *encoded, const char *string, int len)
+int Base64encode(char *encoded, char *source, int len)
 {
 	int i;
 	char *p;
@@ -168,25 +168,27 @@ int Base64encode(char *encoded, const char *string, int len)
 	p = encoded;
 	for (i = 0; i < len - 2; i += 3)
 	{
-		*p++ = basis_64[(string[i] >> 2) & 0x3F];
-		*p++ = basis_64[((string[i] & 0x3) << 4) |
-			((int)(string[i + 1] & 0xF0) >> 4)];
-		*p++ = basis_64[((string[i + 1] & 0xF) << 2) |
-			((int)(string[i + 2] & 0xC0) >> 6)];
-		*p++ = basis_64[string[i + 2] & 0x3F];
+		*p++ = basis_64[(source[i] >> 2) & 0x3F];
+		*p++ = basis_64[((source[i] & 0x3) << 4) |
+			((int)(source[i+1] & 0xF0) >> 4)];
+		*p++ = basis_64[((source[i+1] & 0xF) << 2) |
+			((int)(source[i+2] & 0xC0) >> 6)];
+		*p++ = basis_64[source[i+2] & 0x3F];
 	}
 
 	if (i < len)
 	{
-		*p++ = basis_64[(string[i] >> 2) & 0x3F];
-		if (i == (len - 1)) {
-			*p++ = basis_64[((string[i] & 0x3) << 4)];
+		*p++ = basis_64[(source[i] >> 2) & 0x3F];
+		if (i == (len - 1)) 
+		{
+			*p++ = basis_64[((source[i] & 0x3) << 4)];
 			*p++ = '=';
 		}
-		else {
-			*p++ = basis_64[((string[i] & 0x3) << 4) |
-				((int)(string[i + 1] & 0xF0) >> 4)];
-			*p++ = basis_64[((string[i + 1] & 0xF) << 2)];
+		else 
+		{
+			*p++ = basis_64[((source[i] & 0x3) << 4) |
+				((int)(source[i+1] & 0xF0) >> 4)];
+			*p++ = basis_64[((source[i+1] & 0xF) << 2)];
 		}
 		*p++ = '=';
 	}
@@ -195,7 +197,7 @@ int Base64encode(char *encoded, const char *string, int len)
 	return p - encoded - 1; //last '0' is not needed
 }
 
-int Base64decode(char *bufplain, const char *bufcoded)
+int Base64decode(char *bufplain, char *bufcoded)
 {
 	int nbytesdecoded;
 	register const unsigned char *bufin;

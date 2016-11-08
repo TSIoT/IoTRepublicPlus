@@ -24,6 +24,7 @@
     <ClCompile Include="Broker\CloudUploader.cpp" />
     <ClCompile Include="Broker\FakeBroker.cpp" />
     <ClCompile Include="Broker\IBroker.cpp" />
+    <ClCompile Include="Broker\LoRaBroker.cpp" />
     <ClCompile Include="Broker\XBeeBroker_ApiMode.cpp" />
     <ClCompile Include="Broker\XBee\XBeeApiLibrary.cpp" />
     <ClCompile Include="IoT\BrocastServer.cpp" />
@@ -60,6 +61,7 @@
     <ClInclude Include="Broker\CloudUploader.h" />
     <ClInclude Include="Broker\FakeBroker.h" />
     <ClInclude Include="Broker\IBroker.h" />
+    <ClInclude Include="Broker\LoRaBroker.h" />
     <ClInclude Include="Broker\XBeeBroker_ApiMode.h" />
     <ClInclude Include="Broker\XBee\XBeeApiLibrary.h" />
     <ClInclude Include="IoT\BrocastServer.h" />

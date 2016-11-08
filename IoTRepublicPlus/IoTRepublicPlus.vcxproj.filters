@@ -101,6 +101,9 @@
     <ClCompile Include="IoT\IoTComponent.cpp">
       <Filter>IoT\utility</Filter>
     </ClCompile>
+    <ClCompile Include="Broker\LoRaBroker.cpp">
+      <Filter>Broker</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <Filter Include="Utility">
@@ -223,5 +226,8 @@
       <Filter>IoT\utility</Filter>
     </ClInclude>
     <ClInclude Include="main.h" />
+    <ClInclude Include="Broker\LoRaBroker.h">
+      <Filter>Broker</Filter>
+    </ClInclude>
   </ItemGroup>
 </Project>
